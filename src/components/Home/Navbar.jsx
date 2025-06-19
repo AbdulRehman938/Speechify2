@@ -6,7 +6,7 @@ const Navbar = ({ handleMouseEnter }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="sticky top-0 z-50 w-full flex flex-col items-center bg-transparent">
+    <div className="fixed top-0 z-50 w-full flex flex-col items-center bg-black">
       <div className="flex items-center w-[90%] justify-around py-2 bg-transparent pt-[1rem]">
         <img
           src="src/assets/icons/speechify-logo-v1.svg"

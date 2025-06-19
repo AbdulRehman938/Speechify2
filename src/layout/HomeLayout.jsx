@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Navbar from '../components/Home/Navbar';
 import Curtain from '../components/Home/Curtain';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Import the new images for speakers
 import snoopDoggImage from '/src/assets/images/Snoop-large@2x.webp';
@@ -14,7 +15,8 @@ import pointer from '/src/assets/icons/pointer.svg';
 
 // Import icons (assuming these are already available from react-icons)
 import { HiCheckBadge } from 'react-icons/hi2';
-import { FaApple, FaChrome } from 'react-icons/fa';
+import { FaAndroid, FaApple, FaChrome, FaDesktop, FaGlobe } from 'react-icons/fa';
+import { BsBrowserEdge } from 'react-icons/bs';
 
 // Speaker data - ALL speakers
 const speakerData = [
@@ -33,7 +35,83 @@ const outsideSpeakerData = speakerData.filter(speaker =>
   ["Snoop Dogg", "Cliff Weitzman", "Gwyneth", "Mr-Beast"].includes(speaker.name)
 );
 
-// Flag images CDN (using common flags, adjust as needed if you have local assets)
+
+
+
+const tabsWithIcons = [
+  {
+    label: 'WEB APP',
+    icon: <FaGlobe />,
+    content: {
+      text: 'The fastest way to read any PDF, book, or doc and make it stick. Integrates with Google Drive, Dropbox, Canvas & more.',
+      button: 'Try For Free',
+      image: null,
+      video: 'https://website.cdn.speechify.com/02-DEMOS-web_app@2x-1.mp4',
+    },
+  },
+  {
+    label: 'iOS',
+    icon: <FaApple />,
+    content: {
+      text: 'Let Speechify read to you while you commute, exercise, and run errands. Breeze through PDFs, books, articles, emails — anything.',
+      button: null,
+      image: 'src/assets/icons/download-app.svg',
+      video: 'https://website.cdn.speechify.com/02-DEMOS-iphone@2x-1.mp4',
+    },
+  },
+  {
+    label: 'ANDROID',
+    icon: <FaAndroid />,
+    content: {
+      text: 'Let Speechify read to you while you walk to work, go for a run, or do laundry. Get through PDFs, books, articles, docs & emails twice as fast.',
+      button: null,
+      image: 'src/assets/icons/get-play.svg',
+      video: 'https://website.cdn.speechify.com/02-DEMOS-android@2x-1.mp4',
+    },
+  },
+  {
+    label: 'CHROME EXTENSION',
+    icon: <FaChrome />,
+    content: {
+      text: 'Read up to 4.5x faster by listening with Speechify. Listen to Google Docs, emails, articles & more seamlessly on Chrome.',
+      button: null,
+      image: 'src/assets/icons/add-chrome.svg',
+      video: 'https://website.cdn.speechify.com/02-DEMOS-chrome_extension@2x-1.mp4',
+    },
+  },
+  {
+    label: 'MAC APP',
+    icon: <FaDesktop />,
+    content: {
+      text: 'Use Speechify from your Dock to read PDFs, Word docs, emails & more. Listen and read at the same time to read faster and retain more.',
+      button: null,
+      image: 'src/assets/icons/mac-app.svg',
+      video: 'https://website.cdn.speechify.com/02-DEMOS-mac_app@2x-1.mp4',
+    },
+  },
+  {
+    label: 'EDGE',
+    icon: <BsBrowserEdge />,
+    content: {
+      text: 'Listen to any website on Microsoft Edge with our Edge Extension. Emails, news, docs – anything.',
+      button: null,
+      image: 'src/assets/icons/edge-app.svg',
+      video: 'https://website.cdn.speechify.com/02-DEMOS-edge_extension@2x.mp4',
+    },
+  },
+];
+
+
+const TabSection = () => {
+  const [tabActiveIndex, setTabActiveIndex] = useState(0);
+  const ulRef = useRef(null);
+
+  const sliderStyle = {
+    width: '120px',
+    left: `${tabActiveIndex * 150}px`,
+  };
+}
+
 const flagImages = {
   English: 'https://cdn.jsdelivr.net/gh/hampusborgos/country-flags@main/svg/us.svg',
   Spanish: 'https://cdn.jsdelivr.net/gh/hampusborgos/country-flags@main/svg/mx.svg',
@@ -144,27 +222,25 @@ const languages = [
   { name: "Cantonese", flag: flagImages.Cantonese },
 ];
 
-
 const HomeLayout = () => {
+  const [activeIndex, setActiveIndex] = useState(0); // Default to first (WEB)
   const [speakingIndex, setSpeakingIndex] = useState(null); // For speaker play/pause visual state
   const [selectedLanguage, setSelectedLanguage] = useState('English'); // For language button state
   const [textInput, setTextInput] = useState("Cliff Weitzman is the founder of Speechify.\n\nCliff is also dyslexic.\n\nGrowing up, Cliff’s dad would read him Harry Potter because he couldn't do it himself. Cliff’s dad was his hero.\n\nBut without reading, Cliff couldn't become the person he wanted to be. So, he learned to code and created Speechify to read books to himself.\n\nToday, Speechify helps over 50 million people read faster, remember more, and save time.");
   const [isPlayingMainText, setIsPlayingMainText] = useState(false); // New state for the global play button
 
   const toggleSpeech = (index) => {
-    // This function only handles the visual state for the individual speaker play/pause icon.
     if (speakingIndex === index) {
       setSpeakingIndex(null);
     } else {
       setSpeakingIndex(index);
-      setIsPlayingMainText(false); // Stop main text playback if a speaker is chosen
+      setIsPlayingMainText(false);
     }
   };
 
   const toggleMainTextPlayback = () => {
-    // This function handles the visual state for the main text play/pause button.
     setIsPlayingMainText(prev => !prev);
-    setSpeakingIndex(null); // Stop any individual speaker playback if main text is played
+    setSpeakingIndex(null);
   };
 
   const handleLanguageSelect = (languageName) => {
@@ -174,6 +250,24 @@ const HomeLayout = () => {
   const handleTextInputChange = (e) => {
     setTextInput(e.target.value);
   };
+
+  const [tabActiveIndex, setTabActiveIndex] = useState(0);
+  const [sliderStyle, setSliderStyle] = useState({ width: 0, left: 10 });
+  const ulRef = useRef(null);
+
+  useEffect(() => {
+    const ul = ulRef.current;
+    if (!ul) return;
+
+    const li = ul.children[tabActiveIndex];
+    if (li) {
+      const { offsetLeft, clientWidth } = li;
+      setSliderStyle({
+        left: offsetLeft + clientWidth / 2 - 40, // Adjusted to center and move a little right
+        width: 90,
+      });
+    }
+  }, [tabActiveIndex]);
 
 
   const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -214,7 +308,7 @@ const HomeLayout = () => {
 
       <div className="flex-1 flex flex-col items-center justify-center bg-black text-white w-full overflow-y-auto overflow-x-hidden no-scrollbar">
         <div className="w-[70%] mx-auto flex flex-col items-center justify-center text-center">
-          <h1 className='flex flex-wrap text-[4.5rem] font-normal absolute top-[8rem] bg-transparent w-[72%] leading-none'>
+          <h1 className='flex flex-wrap text-[4.5rem] font-normal right-[13rem] relative top-[8rem] bg-transparent w-[72%] leading-none'>
             #1 Text to Speech Reader. <br />
             Let Speechify Read To You.
           </h1>
@@ -462,9 +556,102 @@ const HomeLayout = () => {
             <img src="src\assets\images\wall_street.png" alt="error" />
           </div>
         </div>
-      </div>
+        <div className='w-[75%] h-[40rem] bg-black mt-[20rem] flex flex-col'>
+          <h1 className='text-[6rem] text-white border-b-[0.2rem] relative z-10 border-b-gray-800 pb-[1rem]'>LISTEN ANYWHERE</h1>
 
-      <style>{`
+          <div className="flex flex-col justify-center mt-[-0.2rem] ml-[25rem] relative z-20">
+            {/* Slider */}
+            <div
+              className="relative top-0 h-[0.2rem] bg-white rounded-full transition-all duration-300"
+              style={{
+                width: sliderStyle.width,
+                left: sliderStyle.left,
+              }}
+            />
+
+            <ul ref={ulRef} className="flex gap-6 relative">
+              {tabsWithIcons.map((tab, index) => (
+                <li
+                  key={tab.label}
+                  onClick={() => setTabActiveIndex(index)}
+                  className={`relative flex items-center gap-2 cursor-pointer px-4 py-2 text-lg text-white transition-opacity duration-200 hover:opacity-60 right-[26rem]`}
+                >
+                  <span className="text-xl">{tab.icon}</span>
+                  <span>{tab.label}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className='h-[30rem] w-[90rem] relative right-[25rem] bg-black mt-[3rem] flex flex-row justify-between align-center items-center'>
+              {/* Left Content with Transition */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={'left-' + tabActiveIndex}
+                  className='w-[40%] h-full flex flex-col justify-start bg-black pt-[5rem] ]'
+                  initial={{ opacity: 0, x: -40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -40 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <h2 className='text-3xl text-white font-bold mb-4'>{tabsWithIcons[tabActiveIndex].content.text}</h2>
+                  <button className="mt-8 px-6 py-3 bg-white text-black rounded-lg hover:bg-blue-700 transition-all duration-300 w-fit h-[3rem] flex items-center justify-center">
+                    {tabsWithIcons[tabActiveIndex].content.button ? (
+                      tabsWithIcons[tabActiveIndex].content.button
+                    ) : tabsWithIcons[tabActiveIndex].content.image ? (
+                      <img
+                        src={tabsWithIcons[tabActiveIndex].content.image}
+                        alt="Button Image"
+                        className="h-full object-cover"
+                      />
+                    ) : null}
+                  </button>
+
+
+
+                </motion.div>
+
+                {/* Right Video with Transition */}
+                <motion.div
+                  key={'right-' + tabActiveIndex}
+                  className='w-[50%] h-full flex justify-center items-center bg-black p-4'
+                  initial={{ opacity: 0, x: 40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 40 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <video
+                    src={tabsWithIcons[tabActiveIndex].content.video}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className='w-full h-full object-cover rounded-lg'
+                  />
+
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+        </div>
+        <div className='bg-black w-[75%] h-[60rem] mt-[20rem] relative flex flex-col justify-center items-center object-cover overflow-visible'>
+          <img className='absolute z-10 w-[100rem] h-[50rem] object-focus' src="src\assets\images\bg-image.png" alt="error" />
+          <div className=' w-[45rem] h-[15rem] relative z-20 flex flex-col justify-around items-center align-center text-center rounded-[1rem]'>
+            <h1 className='text-[4rem] font-medium'>LISTEN TO ANYTHING</h1>
+
+            <button className="group relative inline-flex items-center overflow-hidden rounded-[1rem] border-2 border-transparent bg-white px-[2rem] py-[0.5rem] text-[1rem] font-medium text-black hover:bg-black hover:text-white transition-colors duration-300 hover:px-[2rem] transition-all duration-300 ease-in-out">
+              <span className="duration-400 ease absolute left-0 top-1/2 block h-0 w-full bg-[#2f43fa] opacity-100 transition-all group-hover:top-0 group-hover:h-full"></span>
+              <span className="ease absolute right-0 flex h-10 w-10 translate-x-full transform items-center justify-start duration-500 group-hover:-translate-x-[-1rem]">
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+              </span>
+              <span className="relative transform duration-700 group-hover:-translate-x-1">
+                Try for Free
+              </span>
+            </button>
+          </div>
+        </div>
+        <style>{`
         @keyframes fadeIn {
           from { opacity: 0 }
           to { opacity: 1 }
@@ -493,8 +680,10 @@ const HomeLayout = () => {
           scrollbar-width: none;
         }
       `}</style>
+      </div>
     </div>
   );
 };
+
 
 export default HomeLayout;
