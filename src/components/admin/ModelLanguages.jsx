@@ -12,6 +12,7 @@ const ModelLanguages = ({ handleOpenAction }) => {
                 }}
                 onClick={() => handleOpenAction('addLanguage', 'Add New Language', [
                     { name: 'languageName', placeholder: "Enter Language Name" },
+                    { name: 'languageCode', placeholder: "Enter Language code" }
                 ])}
             >
                 <span className='font-bold text-2xl'>Add Language</span>

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { DatasetAPI, LanguageAPI, ModelAPI, AuthAPI } from '/src/libs/api/apiEndPoints'; // AuthAPI is imported for context, though not directly called here for data retrieval
+// Import UserAPI along with other APIs
+import { DatasetAPI, LanguageAPI, ModelAPI, UserAPI } from '/src/libs/api/apiEndPoints';
 
-// Import constants from the new file
+// Import constants
 import { ADMIN_NAME, ADMIN_FULL_NAME, SIDEBAR_ITEMS } from '../constants/adminConstants';
 import SpeechifyModels from '../components/admin/SpeechifyModels';
 import ModelLanguages from '../components/admin/ModelLanguages';
@@ -12,59 +13,82 @@ import Management from '../components/admin/Managemant';
 
 
 const AdminDashboard = () => {
-    // Use imported constants directly
     const admin = ADMIN_NAME;
     const adminFull = ADMIN_FULL_NAME;
 
-    const sidebarItems = SIDEBAR_ITEMS; // Use the imported constant array
+    const sidebarItems = SIDEBAR_ITEMS;
 
     const [selectedIndex, setSelectedIndex] = useState(0);
-    // State to manage which action modal is active, and its content
     const [activeAction, setActiveAction] = useState(null);
-    const [loggedInUser, setLoggedInUser] = useState(null); // State to hold user data
+    const [loggedInUser, setLoggedInUser] = useState(null);
 
-    // Function to load user data, assuming it's stored after successful authentication
+    // Helper function for error toasts
+    const notifyError = (message) => {
+        toast.error(message, {
+            position: 'top-right',
+            autoClose: 3000,
+            theme: 'colored',
+        });
+    };
+
+    // Helper function for success toasts
+    const notifySuccess = (message) => {
+        toast.success(message, {
+            position: 'top-right',
+            autoClose: 2000,
+            theme: 'colored',
+        });
+    };
+
+    // Function to load user data from localStorage
     const loadUserData = () => {
         try {
-            
-
-            const storedUserData = localStorage.getItem('loggedInUser'); // Assuming the key used to store user data is 'loggedInUser'
+            const storedUserData = localStorage.getItem('loggedInUser');
+            let user = {};
+            const missingFields = [];
 
             if (storedUserData) {
-                const user = JSON.parse(storedUserData);
-               
-                setLoggedInUser({
-                    firstName: user.firstName || 'Admin',
-                    lastName: user.lastName || 'User',
-                    fullName: `${user.firstName || 'Admin'} ${user.lastName || 'User'}`.trim(), // Combine for full name
-                    username: user.username || 'admin_user',
-                    email: user.email || 'admin@example.com',
-                    profileImageUrl: user.profileImageUrl || "src/assets/icons/demo-account.png", // Use the URL from the stored data or a default
-                });
-                notifySuccess("User data loaded successfully from local storage!");
+                user = JSON.parse(storedUserData);
+
+                // Validate essential fields
+                if (!user.firstName) missingFields.push('First Name');
+                if (!user.lastName) missingFields.push('Last Name');
+                if (!user.email) missingFields.push('Email');
+
+                if (missingFields.length > 0) {
+                    notifyError(`Some profile data is missing: ${missingFields.join(', ')}. Using default values.`);
+                }
             } else {
-                setLoggedInUser({
-                    firstName: admin,
-                    lastName: "", 
-                    fullName: adminFull,
-                    username: "Admin", // Default username
-                    email: "", 
-                    profileImageUrl: "src/assets/icons/demo-account.png", // Default image
-                });
                 notifyError("No stored user data found. Displaying default admin profile.");
             }
 
+            // Construct user object with fallbacks
+            const firstName = user.firstName || admin;
+            const lastName = user.lastName || '';
+            const fullName = (firstName + ' ' + lastName).trim() || adminFull;
+            const username = user.username || 'admin_user';
+            const email = user.email || 'admin@example.com';
+            const profileImageUrl = user.profileImageUrl || null;
+
+            setLoggedInUser({
+                firstName,
+                lastName,
+                fullName,
+                username,
+                email,
+                profileImageUrl,
+            });
+
         } catch (error) {
             console.error("Error loading or parsing user data from storage:", error);
-            notifyError("An error occurred while loading user data.");
-            // Ensure loggedInUser is set to a default even if parsing fails
+            notifyError("An error occurred while loading user data from storage. Displaying default admin profile.");
             setLoggedInUser({
                 firstName: admin,
                 lastName: "",
                 fullName: adminFull,
                 username: "Admin",
                 email: "",
-                profileImageUrl: "src/assets/icons/demo-account.png",
+                profileImageUrl: null,
             });
         }
     };
@@ -74,23 +98,7 @@ const AdminDashboard = () => {
         loadUserData();
     }, []);
 
-    const notifyError = (message) => {
-        toast.error(message, {
-            position: 'top-right',
-            autoClose: 2000,
-            theme: 'colored'
-        });
-    };
-
-    const notifySuccess = (message) => {
-        toast.success(message, {
-            position: 'top-right',
-            autoClose: 2000,
-            theme: 'colored'
-        });
-    };
-
-    // Dynamic Action Modal Component
+    // Dynamic Action Modal Component for API interactions
     const ActionModal = ({ action, onClose }) => {
         const [currentInputValues, setCurrentInputValues] = useState({});
 
@@ -113,15 +121,15 @@ const AdminDashboard = () => {
         };
 
         const handleSubmit = async () => {
-            const allRequiredInputsFilled = action.inputs.every(input => {
-                if (input.name.includes('searchQuery') && !currentInputValues[input.name]) {
-                    return true;
+            const missingRequiredFields = [];
+            action.inputs.forEach(input => {
+                if (input.required && !currentInputValues[input.name] && !input.name.includes('searchQuery')) {
+                    missingRequiredFields.push(input.placeholder || input.name);
                 }
-                return currentInputValues[input.name];
             });
 
-            if (!allRequiredInputsFilled) {
-                notifyError("Please fill all required fields.");
+            if (missingRequiredFields.length > 0) {
+                notifyError(`Please fill all required fields: ${missingRequiredFields.join(', ')}.`);
                 return;
             }
 
@@ -158,7 +166,6 @@ const AdminDashboard = () => {
                         response = await ModelAPI.updateModel(payload);
                         break;
 
-                    // --- Model Languages Endpoints ---
                     case 'addLanguage':
                         payload = { languageName: currentInputValues.languageName };
                         response = await LanguageAPI.addLanguage(payload);
@@ -182,7 +189,6 @@ const AdminDashboard = () => {
                         response = await LanguageAPI.updateLanguage(payload);
                         break;
 
-                    // --- Model Datasets Endpoints ---
                     case 'addDataset':
                         payload = { datasetName: currentInputValues.datasetName };
                         response = await DatasetAPI.addDataset(payload);
@@ -203,15 +209,39 @@ const AdminDashboard = () => {
                         response = await DatasetAPI.updateDataset(currentInputValues.datasetName, payload);
                         break;
 
-                    // --- Management (User) Endpoints ---
+                    // --- USER MANAGEMENT ENDPOINTS ---
                     case 'viewUsers':
-                        notifyError("View Users API endpoint is not defined in `apiEndPoints.js`.");
-                        return;
+                        // Based on apiEndPoints.js, this is 'users/profile'.
+                        // If you intend to view *all* users, your apiEndPoints.js
+                        // will need a new UserAPI method (e.g., `getAllUsers: async () => await getRequest('users')`).
+                        // The current endpoint likely returns the logged-in user's profile.
+                        response = await UserAPI.viewUsers();
+                        if (currentInputValues.searchQuery) {
+                            console.warn("Search query is present but UserAPI.viewUsers (users/profile) does not support search parameters directly based on current apiEndPoints.js.");
+                            notifyError("Search query is not supported by current 'View Users' API.");
+                        }
+                        console.log("View Users (users/profile) Data:", response.data);
+                        notifySuccess("Successfully fetched user profile.");
+                        // You might want to display this data in a different way or open a new modal/section
+                        onClose(); // Close modal after fetching
+                        return; // Exit here as we don't need a default success toast after custom handling
+
                     case 'assignRoles':
-                        notifyError("Assign Roles API endpoint is not defined in `apiEndPoints.js`.");
+                        // Placeholder: Your apiEndPoints.js does NOT currently define UserAPI.assignRoles.
+                        // You will need to add a method like:
+                        // assignRoles: async (userId, role) => await patchRequest(`users/${userId}/role`, { role }),
+                        // or similar based on your Swagger.
+                        notifyError("UserAPI.assignRoles is not defined in apiEndPoints.js. Please implement it.");
+                        console.error("Attempted to call UserAPI.assignRoles which is undefined.");
                         return;
+
                     case 'deleteUsers':
-                        notifyError("Delete Users API endpoint is not defined in `apiEndPoints.js`.");
+                        // Placeholder: Your apiEndPoints.js does NOT currently define UserAPI.deleteUsers.
+                        // You will need to add a method like:
+                        // deleteUser: async (userId) => await deleteRequest(`users/${userId}`),
+                        // or similar based on your Swagger.
+                        notifyError("UserAPI.deleteUsers is not defined in apiEndPoints.js. Please implement it.");
+                        console.error("Attempted to call UserAPI.deleteUsers which is undefined.");
                         return;
 
                     default:
@@ -277,6 +307,18 @@ const AdminDashboard = () => {
         setActiveAction(null);
     };
 
+    // Render nothing if loggedInUser is null during initial load
+    if (loggedInUser === null) {
+        return <div className="flex justify-center items-center h-screen w-full text-black">Loading user data...</div>;
+    }
+
+    // Function to get initials for profile image fallback
+    const getInitials = () => {
+        const firstInitial = loggedInUser?.firstName?.charAt(0).toUpperCase() || '';
+        const lastInitial = loggedInUser?.lastName?.charAt(0).toUpperCase() || '';
+        return (firstInitial + lastInitial).trim() || 'AU';
+    };
+
     return (
         <div className='bg-white flex flex-col w-full h-full'>
             <ToastContainer
@@ -301,11 +343,14 @@ const AdminDashboard = () => {
                     <img className='cursor-pointer hover:scale-75' src="src/assets/images/bell.png" alt="bell" />
                 </div>
                 <div className='w-[13rem] h-[2rem] bg-white flex items-center gap-2 pl-[1rem]'>
-                    <span className='text-[1rem] font-bold'>{loggedInUser?.fullName || adminFull}</span>
-                    <img className='rounded-full h-12 w-12'
-                         src={loggedInUser?.profileImageUrl || "src/assets/icons/demo-account.png"}
-                         alt="User Profile"
-                    />
+                    <span className='text-[1rem] font-bold'>{loggedInUser?.fullName}</span>
+                    {loggedInUser?.profileImageUrl ? (
+                        <img className='rounded-full h-12 w-12 object-cover' src={loggedInUser.profileImageUrl} alt="User Profile" />
+                    ) : (
+                        <div className='rounded-full h-12 w-12 bg-gray-300 flex items-center justify-center text-black font-bold text-sm'>
+                            {getInitials()}
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -313,20 +358,22 @@ const AdminDashboard = () => {
             <div className='flex flex-row w-full h-full mt-[2rem]'>
                 {/* Sidebar */}
                 <div className="flex flex-col items-start justify-start bg-[#f5f5fa] h-[30rem] w-[20rem] ml-[3rem] p-[1rem] rounded-[1rem]">
-                    <img className="rounded-full h-auto w-[7rem]"
-                         src={loggedInUser?.profileImageUrl || "src/assets/icons/demo-account.png"}
-                         alt="User Profile"
-                    />
-                    <h1 className="text-[1.5rem] font-semibold mt-2">{loggedInUser?.fullName || 'Abdul Rehman'}</h1>
-                    <p className="text-[1.2rem] font-medium">{loggedInUser?.username || 'Admin'}</p>
+                    {loggedInUser?.profileImageUrl ? (
+                        <img className="rounded-full h-auto w-[7rem] object-cover" src={loggedInUser.profileImageUrl} alt="User Profile" />
+                    ) : (
+                        <div className='rounded-full h-[7rem] w-[7rem] bg-gray-300 flex items-center justify-center text-black font-bold text-3xl'>
+                            {getInitials()}
+                        </div>
+                    )}
+                    <h1 className="text-[1.5rem] font-semibold mt-2">{loggedInUser?.fullName}</h1>
+                    <p className="text-[1.2rem] font-medium">{loggedInUser?.username}</p>
 
                     {/* Sidebar List Items */}
                     <ul className="flex flex-col items-start justify-start w-full mt-[2rem] text-[1.2rem] font-medium">
                         {sidebarItems.map((item, idx) => (
                             <li
                                 key={item}
-                                className={`w-full px-4 py-2 rounded-[0.5rem] cursor-pointer ${selectedIndex === idx ? 'bg-white text-black' : 'hover:bg-[#ccccce]'
-                                    }`}
+                                className={`w-full px-4 py-2 rounded-[0.5rem] cursor-pointer ${selectedIndex === idx ? 'bg-white text-black' : 'hover:bg-[#ccccce]'}`}
                                 onClick={() => setSelectedIndex(idx)}
                             >
                                 {item}
@@ -340,6 +387,7 @@ const AdminDashboard = () => {
                     {selectedIndex === 0 && <SpeechifyModels handleOpenAction={handleOpenAction} />}
                     {selectedIndex === 1 && <ModelLanguages handleOpenAction={handleOpenAction} />}
                     {selectedIndex === 2 && <ModelDatasets handleOpenAction={handleOpenAction} />}
+                    {/* Management component will trigger handleOpenAction for user management */}
                     {selectedIndex === 3 && <Management handleOpenAction={handleOpenAction} />}
                 </div>
             </div>

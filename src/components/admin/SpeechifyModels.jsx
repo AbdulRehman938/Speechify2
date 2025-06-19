@@ -14,6 +14,7 @@ const SpeechifyModels = ({ handleOpenAction }) => {
                     { name: 'modelType', placeholder: "Model Type" },
                     { name: 'modelName', placeholder: "Model Name" },
                     { name: 'displayName', placeholder: "Display Name" },
+                    { name: 'isMultiSpeaker', placeholder: "Multi-Speaker (true or false)" },
                 ])}
             >
                 <span className='font-bold text-2xl'>Add Model</span>

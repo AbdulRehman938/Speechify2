@@ -12,6 +12,7 @@ const ModelDatasets = ({ handleOpenAction }) => {
                 }}
                 onClick={() => handleOpenAction('addDataset', 'Add New Dataset', [
                     { name: 'datasetName', placeholder: "Enter Dataset Name" },
+                    { name: 'datasetCode', placeholder: "Enter Dataset Code" }
                 ])}
             >
                 <span className='font-bold text-2xl'>Add Dataset</span>

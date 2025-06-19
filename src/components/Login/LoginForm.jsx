@@ -50,7 +50,7 @@ const LoginForm = () => {
     localStorage.setItem('user', JSON.stringify(response.data.user));
 
     // Check user role and redirect
-    if (response.data.user.role === 'admin') {
+    if (response.data.user.role === 'admin' || response.data.user.role === 'superadmin') {
       navigate('/admin-dashboard');
     } else {
       navigate('/library');

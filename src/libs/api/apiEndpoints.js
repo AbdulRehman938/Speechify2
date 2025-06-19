@@ -51,7 +51,7 @@ export const ModelAPI = {
 
 // USER ENDPOINTS
 export const UserAPI = {
-  getTTSModels: async () => await getRequest(`users/profile`),
+  viewUsers: async () => await getRequest(`users/profile`),
   updateProfile: async () => await putRequest(`users/profile`, body),
   getTTSModelsByName: async (name) => await getRequest(`users/get-tts-model/{}`),
 };
