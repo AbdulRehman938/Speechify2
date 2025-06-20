@@ -1,6 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import * as framer from 'framer-motion';
 const { motion, AnimatePresence } = framer;
+import forbs from "/src/assets/images/forbes.png"
+import cbs from "/src/assets/images/cbs.png"
+import time from "/src/assets/images/time.png"
+import nyTime from "/src/assets/images/NY-time.png"
+import wallstreet from "/src/assets/images/wall_street.png"
 
 
 import { FaAndroid, FaApple, FaChrome, FaDesktop, FaGlobe } from 'react-icons/fa';
@@ -96,11 +101,11 @@ const Featured = () => {
             <div className='w-[75%] h-[10rem] bg-black relative top-[20rem] mb-[10rem] flex flex-col justify-center items-center gap-4'>
                 <h1 className='text-gray-600 font-medium text-3xl'>Featured In</h1>
                 <div className='w-[75%] h-[4rem] bg-black mt-[2rem] overflow-hidden flex justify-between items-center align-center'>
-                    <img src="src\assets\images\forbes.png" alt="error" />
-                    <img src="src\assets\images\cbs.png" alt="error" />
-                    <img src="src\assets\images\time.png" alt="error" />
-                    <img src="src\assets\images\NY-time.png" alt="error" />
-                    <img src="src\assets\images\wall_street.png" alt="error" />
+                    <img src={forbs} alt="error" />
+                    <img src={cbs} alt="error" />
+                    <img src={time} alt="error" />
+                    <img src={nyTime}  alt="error" />
+                    <img src={wallstreet} alt="error" />
                 </div>
             </div>
             <div className='w-[75%] h-[40rem] bg-black mt-[20rem] flex flex-col'>

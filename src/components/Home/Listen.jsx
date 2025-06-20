@@ -1,8 +1,10 @@
+import bgImage from "/src/assets/images/bg-image.png"
+
 const Listen = () => {
     return (
         <>
             <div className='bg-black w-[75%] h-[60rem] mt-[20rem] relative flex flex-col justify-center items-center object-cover overflow-visible'>
-                <img className='absolute z-10 w-[100rem] h-[50rem] object-focus' src="src\assets\images\bg-image.png" alt="error" />
+                <img className='absolute z-10 w-[100rem] h-[50rem] object-focus' src={bgImage} alt="error" />
                 <div className=' w-[45rem] h-[15rem] relative z-20 flex flex-col justify-around items-center align-center text-center rounded-[1rem]'>
                     <h1 className='text-[4rem] font-medium'>LISTEN TO ANYTHING</h1>
 

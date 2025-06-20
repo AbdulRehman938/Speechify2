@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { FaPauseCircle, FaPlayCircle } from 'react-icons/fa';
+import cliff2img from "/src/assets/images/cliff2-img.png"
+import cliffsign from "/src/assets/images/cliff-sign.png"
 
 const Studio = () => {
     const handleToggle = () => {
@@ -10,7 +12,7 @@ const Studio = () => {
         <>
             <div className='bg-black w-[75%] h-[70rem] relative top-[-10rem] flex flex-row align-center items-center mt-[20rem] justify-center'>
                 <div className='bg-black h-full w-[30%] pl-[2rem]'>
-                    <img className='rounded-full w-[14rem] h-[14rem] black' src="src\assets\images\cliff2-img.png" alt="error" />
+                    <img className='rounded-full w-[14rem] h-[14rem] black' src={cliff2img} alt="error" />
                 </div>
                 <div className='bg-black h-full w-[70%] flex justify-start flex-col align-start items-start pr-[20rem]'>
                     <div className='w-full h-[4rem] bg-black flex justify-left relative right-[5rem] text-white'>
@@ -33,7 +35,7 @@ const Studio = () => {
                     <p className='text-[1.8rem] mt-[1rem] font-medium'>Together with over 100 amazing engineers, we've become the largest provider of AI speech in the world.</p>
                     <p className='text-[1.8rem] mt-[1rem] font-medium'>Today, over 30 million people can achieve their full potential in school and society because Speechify lets them read faster, read more, and remember more.</p>
                     <p className='text-[1.8rem] mt-[1rem] font-medium'>Thank you for using Speechify!</p>
-                    <img className='w-[20rem] h-[7rem] relative right-[4rem]' src="src\assets\images\cliff-sign.png" alt="error" />
+                    <img className='w-[20rem] h-[7rem] relative right-[4rem]' src={cliffsign} alt="error" />
                 </div>
             </div>
         </>
