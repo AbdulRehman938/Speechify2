@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { HiCheckBadge } from 'react-icons/hi2';
 import { FaApple, FaChrome } from 'react-icons/fa';
+import rightBracket from "../../assets/icons/right-bracket.svg"
+import leftBracket from "../../assets/icons/left-bracket.svg"
 
 import snoopDoggImage from '/src/assets/images/Snoop-large@2x.webp';
 import cliffWeitzmanImage from '/src/assets/images/Cliff-img.png';
@@ -60,32 +62,32 @@ const Special = () => {
                 <div className='h-[7rem] mt-[12rem] w-[40%] flex flex-col justify-between items-start align-center px-[1rem]'>
                     <div className='w-[32rem] h-[3rem] flex flex-row justify-between align-center items-center'>
                         <div className=' text-black w-[50%] h-full flex justify-around align-center items-center text-center'>
-                            <img src="\src\assets\icons\left-bracket.svg" alt="error" />
+                            <img src={leftBracket} alt="error" />
                             <div className='flex flex-row gap-[0.5rem]'>
                                 <FaApple className='bg-black text-white text-[1.3rem] mt-[0.1rem]' />
                                 <p className='font-medium text-[1rem] text-white'> 2025 Apple Design Award</p>
                             </div>
-                            <img src="\src\assets\icons\right-bracket.svg" alt="error" />
+                            <img src={rightBracket} alt="error" />
                         </div>
                         <div className=' text-black w-[45%] h-full flex justify-around align-center items-center text-center'>
-                            <img src="\src\assets\icons\left-bracket.svg" alt="error" />
+                            <img src={leftBracket} alt="error" />
                             <p className='font-medium text-[1rem] text-white'>500k+ 5-star reviews</p>
-                            <img src="\src\assets\icons\right-bracket.svg" alt="error" />
+                            <img src={rightBracket} alt="error" />
                         </div>
                     </div>
                     <div className='w-[32rem] h-[3rem] flex flex-row justify-between align-center items-center'>
                         <div className=' text-black w-[55%] h-full flex justify-around align-center items-center text-center'>
-                            <img src="\src\assets\icons\left-bracket.svg" alt="error" />
+                            <img src={leftBracket} alt="error" />
                             <div className='flex flex-row gap-[0.5rem]'>
                                 <FaChrome className='bg-black text-white text-[1.3rem] mt-[0.1rem]' />
                                 <p className='font-medium text-[1rem] text-white'>Chrome Extension of The Year</p>
                             </div>
-                            <img src="\src\assets\icons\right-bracket.svg" alt="error" />
+                            <img src={rightBracket} alt="error" />
                         </div>
                         <div className=' text-black w-[30%] h-full flex justify-around align-center items-center text-center mr-[4rem]'>
-                            <img src="\src\assets\icons\left-bracket.svg" alt="error" />
+                            <img src={leftBracket} alt="error" />
                             <p className='font-medium text-[1rem] text-white'>550M+ Users</p>
-                            <img src="\src\assets\icons\right-bracket.svg" alt="error" />
+                            <img src={rightBracket} alt="error" />
                         </div>
                     </div>
                 </div>
