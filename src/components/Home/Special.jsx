@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { HiCheckBadge } from 'react-icons/hi2';
 import { FaApple, FaChrome } from 'react-icons/fa';
-import rightBracket from "../../assets/icons/right-bracket.svg"
-import leftBracket from "../../assets/icons/left-bracket.svg"
+import rightBracket from "../assets/icons/right-bracket.svg"
+import leftBracket from "../assets/icons/left-bracket.svg"
 
 import snoopDoggImage from '/src/assets/images/Snoop-large@2x.webp';
 import cliffWeitzmanImage from '/src/assets/images/Cliff-img.png';
