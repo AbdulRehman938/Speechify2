@@ -1,13 +1,13 @@
 import React, { useState, useRef } from 'react';
-import Navbar from '/components/Home/Navbar';
-import Curtain from '/components/Home/Curtain';
+import Navbar from '/src/components/Home/Navbar';
+import Curtain from '/src/components/Home/Curtain';
 
-import Special from '/components/Home/Special';
-import Toph1 from '/components/Home/toph1';
-import Featured from '/components/Home/Featured';
-import Listen from '/components/Home/Listen';
-import Studio from '/components/Home/Studio';
-import Studio2 from '/components/Home/Studio2';
+import Special from '/src/components/Home/Special';
+import Toph1 from '/src/components/Home/toph1';
+import Featured from '/src/components/Home/Featured';
+import Listen from '/src/components/Home/Listen';
+import Studio from '/src/components/Home/Studio';
+import Studio2 from '/src/components/Home/Studio2';
 
 
 

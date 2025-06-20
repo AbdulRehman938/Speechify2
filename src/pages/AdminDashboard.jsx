@@ -6,11 +6,11 @@ import { DatasetAPI, LanguageAPI, ModelAPI, UserAPI } from '/src/libs/api/apiEnd
 
 
 // Import constants
-import { ADMIN_NAME, ADMIN_FULL_NAME, SIDEBAR_ITEMS } from '/constants/adminConstants';
-import SpeechifyModels from '/components/admin/SpeechifyModels';
-import ModelLanguages from '/components/admin/ModelLanguages';
-import ModelDatasets from '/components/admin/ModelDatasets';
-import Management from '/components/admin/Managemant';
+import { ADMIN_NAME, ADMIN_FULL_NAME, SIDEBAR_ITEMS } from '/src/constants/adminConstants';
+import SpeechifyModels from '/src/components/admin/SpeechifyModels';
+import ModelLanguages from '/src/components/admin/ModelLanguages';
+import ModelDatasets from '/src/components/admin/ModelDatasets';
+import Management from '/src/components/admin/Managemant';
 
 
 const AdminDashboard = () => {

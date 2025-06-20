@@ -3,12 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
 import 'react-toastify/dist/ReactToastify.css'; // Import Toastify CSS
 
-// Assuming these constants exist. Create them if they don't,
-// for example, in `src/constants/userConstants.js`
 const DEFAULT_USER_NAME = 'Guest User';
 const DEFAULT_USER_EMAIL = 'guest@example.com';
 const DEFAULT_USER_PROFILE_PIC = 'src/assets/icons/demo-account.png';
-const USER_SIDEBAR_ITEMS = [ // Example items, adjust as per your actual menuItems
+const USER_SIDEBAR_ITEMS = [ 
     'Dashboard',
     'My Library',
     'Settings',
@@ -17,15 +15,15 @@ const USER_SIDEBAR_ITEMS = [ // Example items, adjust as per your actual menuIte
 ];
 
 
-import GoalsCard from '/components/UserDashboard/GoalsCard';
-import StatsCard from '/components/UserDashboard/StatsCard';
-import DiscoverApps from '/components/UserDashboard/DiscoverApps';
-import FooterCards from '/components/UserDashboard/FooterCards';
-import EditSetUser from '/components/UserDashboard/EditSetUser';
-import FileSetUser from '/components/UserDashboard/FileSetUser';
-import InstantSetUser from '/components/UserDashboard/InstantSetUser';
-import ThemeSetUser from '/components/UserDashboard/ThemeSetUser';
-import LangSetUser from '/components/UserDashboard/LangSetUser';
+import GoalsCard from '/src/components/UserDashboard/GoalsCard';
+import StatsCard from '/src/components/UserDashboard/StatsCard';
+import DiscoverApps from '/src/components/UserDashboard/DiscoverApps';
+import FooterCards from '/src/components/UserDashboard/FooterCards';
+import EditSetUser from '/src/components/UserDashboard/EditSetUser';
+import FileSetUser from '/src/components/UserDashboard/FileSetUser';
+import InstantSetUser from '/src/components/UserDashboard/InstantSetUser';
+import ThemeSetUser from '/src/components/UserDashboard/ThemeSetUser';
+import LangSetUser from '/src/components/UserDashboard/LangSetUser';
 
 const UserDashboard = () => {
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -136,9 +134,8 @@ const UserDashboard = () => {
                         {menuItems.map((item, idx) => (
                             <li
                                 key={item}
-                                className={`mt-[0.5rem] pl-[0.5rem] pr-[10rem] rounded-[0.5rem] py-[0.3rem] cursor-pointer w-full ${
-                                    selectedIndex === idx ? 'bg-white text-black' : 'bg-transparent hover:bg-[#ccccce]'
-                                }`}
+                                className={`mt-[0.5rem] pl-[0.5rem] pr-[10rem] rounded-[0.5rem] py-[0.3rem] cursor-pointer w-full ${selectedIndex === idx ? 'bg-white text-black' : 'bg-transparent hover:bg-[#ccccce]'
+                                    }`}
                                 onClick={() => setSelectedIndex(idx)}
                             >
                                 {item}
