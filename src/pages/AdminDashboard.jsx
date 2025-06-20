@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // Import UserAPI along with other APIs
-import { DatasetAPI, LanguageAPI, ModelAPI, UserAPI } from '/src/libs/api/apiEndPoints';
+import { DatasetAPI, LanguageAPI, ModelAPI, UserAPI } from '/src/libs/api/apiEndpoints'; // lowercase "e"
+
 
 // Import constants
 import { ADMIN_NAME, ADMIN_FULL_NAME, SIDEBAR_ITEMS } from '../constants/adminConstants';
