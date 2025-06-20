@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import * as Yup from 'yup';
 import { emailOnlySchema } from '/src/validation/loginSchema.js';
 import { useNavigate } from 'react-router-dom';
-import { AuthAPI } from '../../libs/api/apiEndPoints';
+import { AuthAPI } from '/src/libs/api/apiEndpoints';
 
 const OTP_TIMER = 600; // 10 minutes in seconds
 
