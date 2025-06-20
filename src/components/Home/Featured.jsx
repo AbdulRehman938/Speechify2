@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import * as framer from 'framer-motion';
 const { motion, AnimatePresence } = framer;
-import forbs from "/src/assets/images/forbes.png"
-import cbs from "/src/assets/images/cbs.png"
-import time from "/src/assets/images/time.png"
-import nyTime from "/src/assets/images/NY-time.png"
-import wallstreet from "/src/assets/images/wall_street.png"
+import forbs from "../../assets/images/forbes.png"
+import cbs from "../../assets/images/cbs.png"
+import time from "../../assets/images/time.png"
+import nyTime from "../../assets/images/NY-time.png"
+import wallstreet from "../../assets/images/wall_street.png"
 
 
 import { FaAndroid, FaApple, FaChrome, FaDesktop, FaGlobe } from 'react-icons/fa';
