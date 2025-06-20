@@ -17,15 +17,15 @@ const USER_SIDEBAR_ITEMS = [ // Example items, adjust as per your actual menuIte
 ];
 
 
-import GoalsCard from '../components/UserDashboard/GoalsCard';
-import StatsCard from '../components/UserDashboard/StatsCard';
-import DiscoverApps from '../components/UserDashboard/DiscoverApps';
-import FooterCards from '../components/UserDashboard/FooterCards';
-import EditSetUser from '../components/UserDashboard/EditSetUser';
-import FileSetUser from '../components/UserDashboard/FileSetUser';
-import InstantSetUser from '../components/UserDashboard/InstantSetUser';
-import ThemeSetUser from '../components/UserDashboard/ThemeSetUser';
-import LangSetUser from '../components/UserDashboard/LangSetUser';
+import GoalsCard from '/components/UserDashboard/GoalsCard';
+import StatsCard from '/components/UserDashboard/StatsCard';
+import DiscoverApps from '/components/UserDashboard/DiscoverApps';
+import FooterCards from '/components/UserDashboard/FooterCards';
+import EditSetUser from '/components/UserDashboard/EditSetUser';
+import FileSetUser from '/components/UserDashboard/FileSetUser';
+import InstantSetUser from '/components/UserDashboard/InstantSetUser';
+import ThemeSetUser from '/components/UserDashboard/ThemeSetUser';
+import LangSetUser from '/components/UserDashboard/LangSetUser';
 
 const UserDashboard = () => {
     const [selectedIndex, setSelectedIndex] = useState(0);

@@ -1,11 +1,11 @@
 import { Routes, Route } from "react-router-dom";
-import Home from "../pages/Home";
-import Login from "../pages/Login/Login";
-import Library from "../pages/Library/Library";
-import UserDashboard from "../pages/UserDashboard";
-import AdminDashboard from "../pages/AdminDashboard";
-import CreateAccountForm from "../components/Login/CreateAccount";
-import ForgotPasswordForm from "../components/Login/ForgotPasswordForm";
+import Home from "/pages/Home";
+import Login from "/pages/Login/Login";
+import Library from "/pages/Library/Library";
+import UserDashboard from "/pages/UserDashboard";
+import AdminDashboard from "/pages/AdminDashboard";
+import CreateAccountForm from "/components/Login/CreateAccount";
+import ForgotPasswordForm from "/components/Login/ForgotPasswordForm";
 
 const AppRoutes = () => {
   return (

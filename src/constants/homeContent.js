@@ -1,16 +1,16 @@
-import img1 from '../assets/images/home-head-1.webp';
-import img2 from '../assets/images/home-head-2.webp';
-import img3 from '../assets/images/home-head-3.webp';
-import img4 from '../assets/images/home-head-4.webp';
-import img5 from '../assets/images/home-head-5.webp';
-import img6 from '../assets/images/home-head-6.webp';
-import img7 from '../assets/images/home-head-7.webp';
-import img8 from '../assets/images/home-head-8.webp';
-import img9 from '../assets/images/home-head-9.webp';
-import img10 from '../assets/images/home-head-10.webp';
-import img11 from '../assets/images/home-head-11.webp';
-import img12 from '../assets/images/home-head-12.webp';
-import img13 from '../assets/images/students-menu.svg';
+import img1 from '/assets/images/home-head-1.webp';
+import img2 from '/assets/images/home-head-2.webp';
+import img3 from '/assets/images/home-head-3.webp';
+import img4 from '/assets/images/home-head-4.webp';
+import img5 from '/assets/images/home-head-5.webp';
+import img6 from '/assets/images/home-head-6.webp';
+import img7 from '/assets/images/home-head-7.webp';
+import img8 from '/assets/images/home-head-8.webp';
+import img9 from '/assets/images/home-head-9.webp';
+import img10 from '/assets/images/home-head-10.webp';
+import img11 from '/assets/images/home-head-11.webp';
+import img12 from '/assets/images/home-head-12.webp';
+import img13 from '/assets/images/students-menu.svg';
 
 export const curtainImagesMap = {
   0: [img1, img2, img3, img4, img5, img6],
