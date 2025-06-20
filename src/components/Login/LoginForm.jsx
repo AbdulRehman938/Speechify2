@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import SocialLoginButtons from './SocialLoginButtons';
 import FormInput from './FormInput';
 import { fullLoginSchema } from '/src/validation/loginSchema.js';
-import { AuthAPI } from '/src/libs/api/apiEndPoints';
+import { AuthAPI } from '/src/libs/api/apiEndpoints';
 
 const LoginForm = () => {
   const navigate = useNavigate();
