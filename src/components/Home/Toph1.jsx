@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import snoopDoggImage from '/src/assets/images/Snoop-large@2x.webp';
 import cliffWeitzmanImage from '/src/assets/images/Cliff-img.png';
 import gwynethImage from '/src/assets/images/Gwyneth-img.png';
@@ -123,15 +123,7 @@ const Toph1 = () => {
     const [speakingIndex, setSpeakingIndex] = useState(null); // For speaker play/pause visual state
     const [textInput, setTextInput] = useState("Cliff Weitzman is the founder of Speechify.\n\nCliff is also dyslexic.\n\nGrowing up, Cliff’s dad would read him Harry Potter because he couldn't do it himself. Cliff’s dad was his hero.\n\nBut without reading, Cliff couldn't become the person he wanted to be. So, he learned to code and created Speechify to read books to himself.\n\nToday, Speechify helps over 50 million people read faster, remember more, and save time.");
 
-    const TabSection = () => {
-        const [tabActiveIndex, setTabActiveIndex] = useState(0);
-        const ulRef = useRef(null);
-
-        const sliderStyle = {
-            width: '120px',
-            left: `${tabActiveIndex * 150}px`,
-        };
-    }
+  
 
     const toggleMainTextPlayback = () => {
         setIsPlayingMainText(prev => !prev);

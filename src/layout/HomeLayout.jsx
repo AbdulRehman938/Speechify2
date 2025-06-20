@@ -1,17 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import Navbar from '../components/Home/Navbar';
 import Curtain from '../components/Home/Curtain';
-
-
-// Import the new images for speakers
-import snoopDoggImage from '/src/assets/images/Snoop-large@2x.webp';
-import cliffWeitzmanImage from '/src/assets/images/Cliff-img.png';
-import gwynethImage from '/src/assets/images/Gwyneth-img.png';
-import mrBeastImage from '/src/assets/images/Beast-img.png';
-import emily from '/src/assets/images/Emily-img.png';
-import aliAbdaal from '/src/assets/images/Ali_Abdaal-img.png';
-import benjamin from '/src/assets/images/Benjamin-img.png';
-import pointer from '/src/assets/icons/pointer.svg';
 
 import Special from '../components/Home/Special';
 import Toph1 from '../components/Home/toph1';
@@ -20,46 +9,10 @@ import Listen from '../components/Home/Listen';
 import Studio from '../components/Home/Studio';
 import Studio2 from '../components/Home/Studio2';
 
-// Speaker data - ALL speakers
-const speakerData = [
-  { image: emily, name: "Emily", role: "American English" },
-  { image: snoopDoggImage, name: "Snoop Dogg", role: "Music icon" },
-  { image: cliffWeitzmanImage, name: "Cliff Weitzman", role: "Speechify Founder" },
-  { image: gwynethImage, name: "Gwyneth", role: "Actor" },
-  { image: mrBeastImage, name: "Mr-Beast", role: "Youtuber" },
-  { image: aliAbdaal, name: "Ali Abdaal", role: "Youtuber" },
-  { image: benjamin, name: "Benjamin", role: "Narrator" },
-  { image: pointer, name: "Sign In", role: "to explore" }
-];
 
-// Filtered speaker data for the section outside 'speech-content'
-const outsideSpeakerData = speakerData.filter(speaker =>
-  ["Snoop Dogg", "Cliff Weitzman", "Gwyneth", "Mr-Beast"].includes(speaker.name)
-);
+
 
 const HomeLayout = () => {
-
-  const toggleSpeech = (index) => {
-    if (speakingIndex === index) {
-      setSpeakingIndex(null);
-    } else {
-      setSpeakingIndex(index);
-      setIsPlayingMainText(false);
-    }
-  };
-
-  const toggleMainTextPlayback = () => {
-    setIsPlayingMainText(prev => !prev);
-    setSpeakingIndex(null);
-  };
-
-  const handleLanguageSelect = (languageName) => {
-    setSelectedLanguage(languageName);
-  };
-
-  const handleTextInputChange = (e) => {
-    setTextInput(e.target.value);
-  };
 
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [hoveredLiIndex, setHoveredLiIndex] = useState(null);

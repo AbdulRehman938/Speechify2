@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import * as framer from 'framer-motion';
+const { motion, AnimatePresence } = framer;
+
 
 import { FaAndroid, FaApple, FaChrome, FaDesktop, FaGlobe } from 'react-icons/fa';
 import { BsBrowserEdge } from 'react-icons/bs';
@@ -70,15 +72,6 @@ const tabsWithIcons = [
 
 const Featured = () => {
     const [tabActiveIndex, setTabActiveIndex] = useState(0);
-    const TabSection = () => {
-        const [tabActiveIndex, setTabActiveIndex] = useState(0);
-        const ulRef = useRef(null);
-
-        const sliderStyle = {
-            width: '120px',
-            left: `${tabActiveIndex * 150}px`,
-        };
-    }
     const [sliderStyle, setSliderStyle] = useState({ width: 0, left: 10 });
 
     const ulRef = useRef(null);

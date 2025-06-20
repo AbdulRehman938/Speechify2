@@ -5,7 +5,6 @@ const Studio = () => {
     const handleToggle = () => {
         setIsPlaying((prev) => !prev);
     };
-    const [isPlayingMainText, setIsPlayingMainText] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
     return (
         <>

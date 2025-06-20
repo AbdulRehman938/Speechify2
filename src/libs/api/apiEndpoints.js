@@ -1,7 +1,6 @@
 import {
   deleteRequest,
   getRequest,
-  patchRequest,
   postRequest,
   putRequest,
 } from "/src/libs/api/methods.js";

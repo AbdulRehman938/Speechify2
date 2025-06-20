@@ -16,12 +16,11 @@ const speakerData = [
 ];
 
 const Special = () => {
-    const outsideSpeakerData = speakerData.filter(speaker =>
-        ["Snoop Dogg", "Cliff Weitzman", "Gwyneth", "Mr-Beast"].includes(speaker.name)
-    );
 
-    const [speakingIndex, setSpeakingIndex] = useState(null); // For speaker play/pause visual state
-    const toggleSpeech = (index) => {
+    
+    const [ setIsPlayingMainText] = useState(false);
+
+ const toggleSpeech = (index) => {
         if (speakingIndex === index) {
             setSpeakingIndex(null);
         } else {
@@ -29,6 +28,13 @@ const Special = () => {
             setIsPlayingMainText(false);
         }
     };
+    
+    const outsideSpeakerData = speakerData.filter(speaker =>
+        ["Snoop Dogg", "Cliff Weitzman", "Gwyneth", "Mr-Beast"].includes(speaker.name)
+    );
+
+    const [speakingIndex, setSpeakingIndex] = useState(null); // For speaker play/pause visual state
+   
 
     return (
         <>

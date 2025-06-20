@@ -40,7 +40,6 @@ export const patchRequest = async (url, data, params = {}) => {
     return response.data;
   } catch (error) {
     return errorHandler(error);
-    console.log(error);
   }
 };
 export const deleteRequest = async (url, params = {}) => {
@@ -50,7 +49,6 @@ export const deleteRequest = async (url, params = {}) => {
     return response?.data;
   } catch (error) {
     return errorHandler(error);
-    console.log(error);
   }
 };
 
