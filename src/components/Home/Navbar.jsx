@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { navItems } from '/src/constants/homeContent';
-import speechifyLogo2 from "src/assets/icons/speechify-logo-v1.svg";
+import speechifyLogo2 from "/src/assets/icons/speechify-logo-v1.svg";
 
 const Navbar = ({ handleMouseEnter }) => {
   const navigate = useNavigate();
