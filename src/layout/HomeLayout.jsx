@@ -13,7 +13,6 @@ import aliAbdaal from '/src/assets/images/Ali_Abdaal-img.png';
 import benjamin from '/src/assets/images/Benjamin-img.png';
 import pointer from '/src/assets/icons/pointer.svg';
 
-// Import icons (assuming these are already available from react-icons)
 import Special from '../components/Home/Special';
 import Toph1 from '../components/Home/toph1';
 import Featured from '../components/Home/Featured';
