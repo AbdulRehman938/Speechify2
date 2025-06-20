@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import sunIcon from '../../assets/images/sun-icon.svg';
-import moonIcon from '../../assets/images/moon-icon.svg';
+import sunIcon from '/src/assets/images/sun-icon.svg';
+import moonIcon from '/src/assets/images/moon-icon.svg';
 
 const ThemeToggle = () => {
   const [active, setActive] = useState('light');

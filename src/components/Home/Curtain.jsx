@@ -1,5 +1,5 @@
 import React from 'react';
-import { curtainContentsMap, curtainImagesMap } from '../../constants/homeContent';
+import { curtainContentsMap, curtainImagesMap } from '/src/constants/homeContent';
 
 const Curtain = ({
   showCurtain,

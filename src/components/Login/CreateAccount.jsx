@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import FormInput from './FormInput';
 import { registerSchema } from '/src/validation/loginSchema.js';
-import { AuthAPI, ImageAPI } from '../../libs/api/apiEndPoints';
+import { AuthAPI, ImageAPI } from '/src/libs/api/apiEndpoints';
 
 const OTP_TIMER = 600; // 10 minutes in seconds
 

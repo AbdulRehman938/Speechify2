@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { navItems } from '../../constants/homeContent';
+import { navItems } from '/src/constants/homeContent';
 
 const Navbar = ({ handleMouseEnter }) => {
   const navigate = useNavigate();
