@@ -3,7 +3,7 @@ import Navbar from '/src/components/Home/Navbar';
 import Curtain from '/src/components/Home/Curtain';
 
 import Special from '/src/components/Home/Special';
-import Toph1 from '/src/components/Home/toph1';
+import Toph1 from '/src/components/Home/Toph1';
 import Featured from '/src/components/Home/Featured';
 import Listen from '/src/components/Home/Listen';
 import Studio from '/src/components/Home/Studio';
