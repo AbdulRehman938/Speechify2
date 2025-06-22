@@ -7,6 +7,7 @@ import SocialLoginButtons from './SocialLoginButtons';
 import FormInput from './FormInput';
 import { fullLoginSchema } from '/src/validation/loginSchema.js';
 import { AuthAPI } from '/src/libs/api/apiEndpoints';
+import logo2 from "../../assets/icons/Speechify-logo2.svg"
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -78,7 +79,7 @@ const LoginForm = () => {
       <ToastContainer />
 
       <form className='flex flex-col gap-4 w-full justify-center items-center' onSubmit={formik.handleSubmit}>
-        <img className='min-w-[10rem] absolute inset-y-[10rem]' src="/src/assets/icons/Speechify-logo2.svg" alt="login-logo" />
+        <img className='min-w-[10rem] absolute inset-y-[10rem]' src={logo2} alt="login-logo" />
         <h1 className='font-medium text-[#000] relative inset-y-[1rem] text-[2.5rem]'>Welcome Back</h1>
 
         <SocialLoginButtons />
