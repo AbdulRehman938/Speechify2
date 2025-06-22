@@ -7,6 +7,10 @@ import time from "../../assets/images/time.png"
 import nyTime from "../../assets/images/NY-time.png"
 import wallstreet from "../../assets/images/wall_street.png"
 const downloadapp = new URL('../../assets/icons/download-app.svg', import.meta.url).href;
+const getplay = new URL('../../assets/icons/get-play.svg', import.meta.url).href;
+const addchrome = new URL('../../assets/icons/add-chrome.svg', import.meta.url).href;
+const macapp = new URL('../../assets/icons/mac-app.svg', import.meta.url).href;
+const edgeapp = new URL('../../assets/icons/edge-app.svg', import.meta.url).href;
 
 import { FaAndroid, FaApple, FaChrome, FaDesktop, FaGlobe } from 'react-icons/fa';
 import { BsBrowserEdge } from 'react-icons/bs';
@@ -39,7 +43,7 @@ const tabsWithIcons = [
         content: {
             text: 'Let Speechify read to you while you walk to work, go for a run, or do laundry. Get through PDFs, books, articles, docs & emails twice as fast.',
             button: null,
-            image: 'src/assets/icons/get-play.svg',
+            image: getplay,
             video: 'https://website.cdn.speechify.com/02-DEMOS-android@2x-1.mp4',
         },
     },
@@ -49,7 +53,7 @@ const tabsWithIcons = [
         content: {
             text: 'Read up to 4.5x faster by listening with Speechify. Listen to Google Docs, emails, articles & more seamlessly on Chrome.',
             button: null,
-            image: 'src/assets/icons/add-chrome.svg',
+            image: addchrome,
             video: 'https://website.cdn.speechify.com/02-DEMOS-chrome_extension@2x-1.mp4',
         },
     },
@@ -59,7 +63,7 @@ const tabsWithIcons = [
         content: {
             text: 'Use Speechify from your Dock to read PDFs, Word docs, emails & more. Listen and read at the same time to read faster and retain more.',
             button: null,
-            image: 'src/assets/icons/mac-app.svg',
+            image: macapp,
             video: 'https://website.cdn.speechify.com/02-DEMOS-mac_app@2x-1.mp4',
         },
     },
@@ -69,7 +73,7 @@ const tabsWithIcons = [
         content: {
             text: 'Listen to any website on Microsoft Edge with our Edge Extension. Emails, news, docs – anything.',
             button: null,
-            image: 'src/assets/icons/edge-app.svg',
+            image: edgeapp,
             video: 'https://website.cdn.speechify.com/02-DEMOS-edge_extension@2x.mp4',
         },
     },
