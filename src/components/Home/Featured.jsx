@@ -6,7 +6,7 @@ import cbs from "../../assets/images/cbs.png"
 import time from "../../assets/images/time.png"
 import nyTime from "../../assets/images/NY-time.png"
 import wallstreet from "../../assets/images/wall_street.png"
-import downloadapp from "../../assets/icons/download-app.svg"
+import downloadapp from "../../assets/icons/download-app.svg";
 
 import { FaAndroid, FaApple, FaChrome, FaDesktop, FaGlobe } from 'react-icons/fa';
 import { BsBrowserEdge } from 'react-icons/bs';
@@ -29,7 +29,7 @@ const tabsWithIcons = [
         content: {
             text: 'Let Speechify read to you while you commute, exercise, and run errands. Breeze through PDFs, books, articles, emails — anything.',
             button: null,
-            image: {downloadapp},
+            image: downloadapp,
             video: 'https://website.cdn.speechify.com/02-DEMOS-iphone@2x-1.mp4',
         },
     },
