@@ -15,7 +15,7 @@ const Curtain = ({
   return (
     <div
       className={`
-        absolute top-0 left-0 w-full z-10 bg-[#1a1919] text-white h-[30rem] pl-[20rem] pr-[25rem] pt-[5rem] overflow-hidden flex items-center
+        fixed top-0 left-0 w-full z-10 bg-[#1a1919] text-white h-[30rem] pl-[20rem] pr-[25rem] pt-[5rem] overflow-hidden flex items-center
         transition-transform duration-700 ease-in-out
         ${showCurtain ? 'translate-y-0' : '-translate-y-full'}
       `}

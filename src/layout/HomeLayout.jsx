@@ -8,6 +8,9 @@ import Featured from '/src/components/Home/Featured';
 import Listen from '/src/components/Home/Listen';
 import Studio from '/src/components/Home/Studio';
 import Studio2 from '/src/components/Home/Studio2';
+import Simba from '../components/Home/Simba';
+import FAQ from '../components/Home/FAQ';
+import Footer from '../components/Home/Footer';
 
 
 
@@ -63,6 +66,10 @@ const HomeLayout = () => {
 
         <Studio2 />
 
+        <Simba />
+
+        <FAQ />
+
         <style>{`
         @keyframes fadeIn {
           from { opacity: 0 }
@@ -93,6 +100,7 @@ const HomeLayout = () => {
         }
       `}</style>
       </div>
+      <Footer />
     </div>
   );
 };

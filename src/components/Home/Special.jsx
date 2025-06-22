@@ -19,10 +19,10 @@ const speakerData = [
 
 const Special = () => {
 
-    
-    const [ setIsPlayingMainText] = useState(false);
 
- const toggleSpeech = (index) => {
+    const [setIsPlayingMainText] = useState(false);
+
+    const toggleSpeech = (index) => {
         if (speakingIndex === index) {
             setSpeakingIndex(null);
         } else {
@@ -30,13 +30,13 @@ const Special = () => {
             setIsPlayingMainText(false);
         }
     };
-    
+
     const outsideSpeakerData = speakerData.filter(speaker =>
         ["Snoop Dogg", "Cliff Weitzman", "Gwyneth", "Mr-Beast"].includes(speaker.name)
     );
 
     const [speakingIndex, setSpeakingIndex] = useState(null); // For speaker play/pause visual state
-   
+
 
     return (
         <>
@@ -110,13 +110,13 @@ const Special = () => {
                                     />
                                 </div>
                                 <div
-                                    className="absolute bottom-[2.5rem] right-0 transform translate-x-1/4 translate-y-1/4 z-20 overflow-hidden rounded-full text-[40px] text-white cursor-pointer"
+                                    className="absolute bottom-[4rem] right-0 transform translate-x-1/4 translate-y-1/4 z-20 overflow-hidden rounded-full text-[40px] text-white cursor-pointer"
                                     style={{
-                                        background: 'radial-gradient(circle, rgb(26, 26, 27) 60%, transparent 60%)',
+                                        background: 'radial-gradient(circle, #f0f4f9 60%, #000 60%)',
                                     }}
                                     onClick={() => toggleSpeech(i)}
                                 >
-                                    <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" fill="black">
                                         <path
                                             fillRule="evenodd"
                                             clipRule="evenodd"

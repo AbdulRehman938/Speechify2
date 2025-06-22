@@ -213,7 +213,7 @@ const Toph1 = () => {
                                             </svg>
                                             <div className="relative z-10 h-full">
                                                 <textarea
-                                                    className="h-full w-full [&>p]:h-full [&>p]:indent-6 outline-none resize-none text-black bg-transparent"
+                                                    className="h-full w-full [&>p]:h-full [&>p]:indent-6 outline-none resize-none border-transparent text-black bg-transparent"
                                                     value={textInput}
                                                     onChange={handleTextInputChange}
                                                     rows={10}
@@ -233,7 +233,7 @@ const Toph1 = () => {
                                     {speakerData.map((speaker, i) => (
                                         <div key={i} className="z-80 group relative flex flex-col items-center gap-3 cursor-pointer">
                                             <div
-                                                className={`h-[9rem] w-[9rem] rounded-full overflow-hidden hover:bg-blue-100 cursor-pointer animate-fade-in
+                                                className={`h-[9rem] w-[9rem] bg-[#f0f4f9] rounded-full overflow-hidden hover:bg-blue-100 cursor-pointer animate-fade-in
                                             ${speaker.name === "Sign In" ? 'bg-white' : 'bg-white'} `}
                                             >
                                                 <img
@@ -247,7 +247,7 @@ const Toph1 = () => {
                                             </div>
                                             {speaker.name !== "Sign In" && ( // Conditionally render play button
                                                 <div
-                                                    className="absolute bottom-[2.5rem] right-0 transform translate-x-1/4 translate-y-1/4 z-20 overflow-hidden rounded-full text-[40px] text-white cursor-pointer"
+                                                    className="absolute bottom-[5rem] right-4 transform translate-x-1/4 translate-y-1/4 z-20 overflow-hidden rounded-full text-[40px] text-white cursor-pointer"
                                                     style={{
                                                         background: 'radial-gradient(circle, rgb(26, 26, 27) 60%, transparent 60%)',
                                                     }}
