@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import { emailOnlySchema } from '/src/validation/loginSchema.js';
 import { useNavigate } from 'react-router-dom';
 import { AuthAPI } from '/src/libs/api/apiEndpoints';
+import logo2 from "../../assets/icons/Speechify-logo2.svg"
 
 const OTP_TIMER = 600; // 10 minutes in seconds
 
@@ -168,7 +169,7 @@ const ForgotPasswordForm = () => {
           <ToastContainer />
           <img
             className="min-w-[10rem] absolute inset-y-[20rem]"
-            src="/src/assets/icons/Speechify-logo2.svg"
+            src={logo2}
             alt="logo"
           />
 

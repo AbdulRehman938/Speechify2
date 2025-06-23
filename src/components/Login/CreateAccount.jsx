@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import logo2 from "../../assets/icons/Speechify-logo2.svg"
 
 import FormInput from './FormInput';
 import { registerSchema } from '/src/validation/loginSchema.js';
@@ -221,7 +222,7 @@ const CreateAccountForm = () => {
             {/* Logo - now part of the flex column flow */}
             <img
                 className="min-w-[10rem] mt-4 mb-2" // Adjusted margins
-                src="/src/assets/icons/Speechify-logo2.svg"
+                src={logo2}
                 alt="create-account-logo"
             />
             {/* Heading - now part of the flex column flow */}
