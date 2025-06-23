@@ -8,6 +8,8 @@ import FormInput from './FormInput';
 import { fullLoginSchema } from '/src/validation/loginSchema.js';
 import { AuthAPI } from '/src/libs/api/apiEndpoints';
 import logo2 from "../../assets/icons/Speechify-logo2.svg"
+const openeye = new URL('../../assets/images/Openeye.svg', import.meta.url).href;
+const closedeye = new URL ('../../assets/images/Closedeye.svg', import.meta.url).href;
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -46,11 +48,9 @@ const LoginForm = () => {
           return;
         }
 
-        // Save token and user info
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
 
-        // Check user role and redirect
         if (response.data.user.role === 'admin' || response.data.user.role === 'superadmin') {
           navigate('/admin-dashboard');
         } else {
@@ -105,10 +105,11 @@ const LoginForm = () => {
             value={formik.values.password}
             onChange={formik.handleChange}
             onBlur={handleBlurWithToast}
-            icon={showPassword ? '/src/assets/images/Openeye.svg' : '/src/assets/images/Closedeye.svg'}
+            icon={showPassword ? openeye : closedeye}
             onIconClick={() => setShowPassword(prev => !prev)}
             autoComplete="current-password"
           />
+
         </div>
 
         <button type='submit' className='w-full h-[3rem] bg-[#2f43fa] text-white rounded-[1rem] font-bold text-[1.2rem] hover:bg-[#1e2bfa] hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 relative inset-y-[1rem]'>

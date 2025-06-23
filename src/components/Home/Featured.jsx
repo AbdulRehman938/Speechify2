@@ -12,7 +12,7 @@ const addchrome = new URL('../../assets/icons/add-chrome.svg', import.meta.url).
 const macapp = new URL('../../assets/icons/mac-app.svg', import.meta.url).href;
 const edgeapp = new URL('../../assets/icons/edge-app.svg', import.meta.url).href;
 
-import { FaAndroid, FaApple, FaChrome, FaDesktop, FaGlobe } from 'react-icons/fa';
+import { FaAndroid, FaApple, FaChrome, FaDesktop, FaGlobe } from 'react-icons/fa'; 
 import { BsBrowserEdge } from 'react-icons/bs';
 
 
