@@ -88,7 +88,7 @@ const Library = () => {
 
   return (
     <div
-      className="relative flex flex-col items-center justify-center h-screen bg-white"
+      className="relative flex flex-col items-center justify-center h-screen w-auto bg-white"
       onContextMenu={handleContextMenu}
       onClick={() => setContextMenuVisible(false)}
     >
@@ -174,7 +174,7 @@ const Library = () => {
               onDrop={handleDrop}
               onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
               onDragLeave={() => setDragging(false)}
-              className={`w-full h-[15rem] flex flex-col justify-center items-center border-dashed border-[0.2rem] mt-[1rem] rounded-[1rem] ${dragging ? 'border-blue-500 bg-blue-50' : 'border-gray-500'
+              className={`w-[30rem] h-[15rem] flex flex-col justify-center items-center border-dashed border-[0.2rem] mt-[1rem] rounded-[1rem] ${dragging ? 'border-blue-500 bg-blue-50' : 'border-gray-500'
                 }`}
             >
               <input type="file" accept=".pdf,.doc,.txt,.epub" ref={fileInputRef} onChange={handleFileChange} multiple hidden />
