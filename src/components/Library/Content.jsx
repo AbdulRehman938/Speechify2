@@ -6,7 +6,7 @@ import epub from "../../assets/icons/epub.svg";
 import drive from "../../assets/icons/drive.svg";
 import dropbox from "../../assets/icons/dropbox.svg";
 import cloud from "../../assets/icons/cloud.svg";
-import logo from "../../assets/icons/speechify-logo2.svg";
+import logo from "../../assets/icons/Speechify-logo2.svg";
 import { RxText } from "react-icons/rx";
 import { IoIosLink } from "react-icons/io";
 import { BsCamera } from "react-icons/bs";
