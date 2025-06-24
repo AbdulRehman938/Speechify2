@@ -125,7 +125,7 @@ const Content = ({ onTriggerCreateText, onTriggerPasteLink }) => {
                 <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50' onClick={() => setShowModal(false)}>
                     <div onClick={(e) => e.stopPropagation()} className='relative bg-white w-11/12 sm:w-[40rem] h-[32rem] rounded-2xl shadow-xl flex flex-col justify-between items-center p-6'>
                         <IoClose onClick={() => setShowModal(false)} className='absolute top-3 right-3 text-3xl text-gray-600 cursor-pointer hover:text-black' />
-                        <img src={logo} alt="Speechify Logo" className='w-[10rem] sm:w-[15rem] mb-6 mt-[3rem]' />
+                        <img src={logo} alt="error" className='w-[10rem] sm:w-[15rem] mb-6 mt-[3rem]' />
                         <h1 className='font-medium text-xl sm:text-3xl text-black text-center'>Use Speechify mobile app to scan any book or document</h1>
                         <p className='text-sm text-gray-500 mt-4'>Please scan the QR code below to download the app.</p>
                         <div className='bg-gray-300 w-[12rem] h-[10rem] sm:w-[15rem] sm:h-[13rem] mt-4 flex justify-center items-center'>QR code</div>
