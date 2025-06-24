@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import logo2 from "../../assets/icons/Speechify-logo2.svg"
+import openeye from "../../assets/images/Openeye.svg"
+import closedeye from "../../assets/images/Closedeye.svg"   
 
 import FormInput from './FormInput';
 import { registerSchema } from '/src/validation/loginSchema.js';
@@ -306,7 +308,7 @@ const CreateAccountForm = () => {
                             value={formik.values.password}
                             onChange={formik.handleChange}
                             onBlur={handleBlurWithToast}
-                            icon={showPassword ? '/src/assets/images/Openeye.svg' : '/src/assets/images/Closedeye.svg'}
+                            icon={showPassword ? openeye : closedeye}
                             onIconClick={() => setShowPassword((prev) => !prev)}
                             autoComplete="new-password"
                         />
