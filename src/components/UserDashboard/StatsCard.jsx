@@ -1,7 +1,7 @@
 import React from 'react';
 
 const StatsCard = () => (
-  <div className="bg-white h-full w-[62%] rounded-[1rem] cursor-pointer">
+  <div className="bg-white h-full w-[90%] ml-[3rem] p-1 rounded-[1rem] cursor-pointer">
     <div className="w-full h-[30%] mt-[0.5rem] flex items-center justify-between px-[1rem] text-black">
       <span className="text-[1.2rem] font-medium">Statistics</span>
       <img src="src/assets/icons/right-arrow.svg" alt="arrow" />

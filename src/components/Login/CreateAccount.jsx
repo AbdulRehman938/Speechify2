@@ -260,9 +260,9 @@ const CreateAccountForm = () => {
                             (or drag and drop)
                         </p>
                         <div className="flex gap-4 mt-2">
-                            <img src="https://placehold.co/24x24/white/gray?text=G" alt="Google" title="Upload from Google" className="cursor-not-allowed opacity-50"/>
-                            <img src="https://placehold.co/24x24/white/gray?text=D" alt="Drive" title="Upload from Drive" className="cursor-not-allowed opacity-50"/>
-                            <img src="https://placehold.co/24x24/white/gray?text=A" alt="Apple" title="Upload from Apple" className="cursor-not-allowed opacity-50"/>
+                            <img src="https://placehold.co/24x24/white/gray?text=G" alt="Google" title="Upload from Google" className="cursor-not-allowed opacity-50" />
+                            <img src="https://placehold.co/24x24/white/gray?text=D" alt="Drive" title="Upload from Drive" className="cursor-not-allowed opacity-50" />
+                            <img src="https://placehold.co/24x24/white/gray?text=A" alt="Apple" title="Upload from Apple" className="cursor-not-allowed opacity-50" />
                         </div>
                     </div>
 

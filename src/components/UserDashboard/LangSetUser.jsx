@@ -1,19 +1,72 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const LangSetUser = () => (
-    <>
-        <div className='bg-white w-full h-[15%] relative rounded-[1rem] border-b-2 border-b-[#e9eaf0] flex flex-col items-center justify-between top-[1rem]'>
-            <div className='bg-white h-[3rem] w-full relative top-[-1rem] flex flex-wrap justify-between items-center'>
-                <span className='font-semibold text-[1.3rem] ml-[2rem]'>Language</span>
-                <div id='toggle-btn' className='mr-[1rem] bg-gray-200 p-[0.6rem] rounded-[1rem] px-[1rem] mt-[1rem] flex gap-[0.4rem] cursor-pointer hover:bg-gray-300'>
-                    <span>English</span>
-                    <img src="src\assets\images\down-arrow.svg" alt="down-arrow" />
-                </div>
-            </div>
-            <p className='text-[#8d8d8d] relative inset-x-[-7.2rem] inset-y-[-0.6rem] font-medium'>Automatically launch listening as soon as your file is</p>
-            <p className='text-[#8d8d8d] relative inset-x-[-13.5rem] inset-y-[-1rem] font-medium'>imported to your library.</p>
+const languages = [
+    { name: "English", code: "en" },
+    { name: "Spanish", code: "es" },
+    { name: "French", code: "fr" },
+    { name: "German", code: "de" },
+    { name: "Portuguese", code: "pt" },
+    { name: "Chinese", code: "zh" },
+    { name: "Italian", code: "it" },
+    { name: "Japanese", code: "ja" },
+    { name: "Urdu", code: "ur" },
+    // Add more languages as needed
+];
+
+const LangSetUser = () => {
+  const [autoDetectLanguage, setAutoDetectLanguage] = useState(true);
+  const [selectedLanguage, setSelectedLanguage] = useState('en'); // Default to English code
+
+  const handleToggleAutoDetect = () => {
+    setAutoDetectLanguage(prev => !prev);
+  };
+
+  const handleLanguageChange = (e) => {
+    setSelectedLanguage(e.target.value);
+  };
+
+  return (
+    <div className='bg-white w-full h-[25%] relative rounded-[1rem] border-b-2 border-b-[#e9eaf0] flex flex-col items-center justify-start py-4'>
+      <div className='w-full flex justify-between items-center px-[2rem] mb-4'>
+        <span className='font-semibold text-[1.3rem]'>Auto-detect Language</span>
+        <button
+          role="switch"
+          type="button"
+          aria-checked={autoDetectLanguage}
+          tabIndex={0}
+          onClick={handleToggleAutoDetect}
+          className={`h-6 w-[4rem] rounded-full flex p-spl-1 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-[#1D76ED] pt-[0.1rem] ${autoDetectLanguage ? 'bg-[#2f43fa]' : 'bg-[#e9eaf0]'}`}
+        >
+          <span
+            className={`h-5 w-8 block relative transition rounded-full duration-300 ease-in-out transform bg-white ${autoDetectLanguage ? 'translate-x-[90%]' : 'translate-x-[10%]'}`}
+          />
+        </button>
+      </div>
+
+      <p className='text-[#8d8d8d] text-left w-full px-[2rem] font-medium mb-4'>
+        Automatically detects the language of your content for accurate pronunciation.
+      </p>
+
+      {!autoDetectLanguage && (
+        <div className='w-full flex flex-col items-start px-[2rem] mt-2'>
+          <label htmlFor="language-select" className="font-semibold text-[1.1rem] mb-2">Preferred Language:</label>
+          <select
+            id="language-select"
+            value={selectedLanguage}
+            onChange={handleLanguageChange}
+            className="w-full p-2 border border-[#e9eaf0] rounded-[0.5rem] bg-[#f5f5fa] text-black text-[1rem]"
+          >
+            {languages.map((lang) => (
+              <option key={lang.code} value={lang.code}>{lang.name}</option>
+            ))}
+          </select>
+          <p className='text-[#8d8d8d] text-left w-full mt-2 font-medium'>
+            Select your preferred language if auto-detection is off.
+          </p>
         </div>
-    </>
-);
+      )}
+    </div>
+  );
+};
 
 export default LangSetUser;

@@ -1,7 +1,7 @@
 import React from 'react';
 
 const GoalsCard = () => (
-  <div className="bg-white h-full w-[35%] rounded-[1rem] cursor-pointer">
+  <div className="bg-white h-full w-[120%] rounded-[1rem] p-1 cursor-pointer">
     <div className="flex justify-between w-full h-[30%] mt-[1rem] px-[1rem]">
       <p className="text-[1.2rem] font-semibold">Daily Goal</p>
       <img className="w-[1.5rem] h-[1.5rem]" src="src/assets/images/pencil.png" alt="edit" />
