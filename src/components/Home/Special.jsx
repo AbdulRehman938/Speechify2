@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { HiCheckBadge } from 'react-icons/hi2';
 import { FaApple, FaChrome } from 'react-icons/fa';
 import rightBracket from "/src/assets/icons/right-bracket.svg"
@@ -19,6 +20,8 @@ const speakerData = [
 
 const Special = () => {
 
+    const navigate = useNavigate();
+
 
     const [setIsPlayingMainText] = useState(false);
 
@@ -35,17 +38,23 @@ const Special = () => {
         ["Snoop Dogg", "Cliff Weitzman", "Gwyneth", "Mr-Beast"].includes(speaker.name)
     );
 
-    const [speakingIndex, setSpeakingIndex] = useState(null); // For speaker play/pause visual state
+    const [speakingIndex, setSpeakingIndex] = useState(null);
+
+  const handleClick = () => {
+    navigate('/try_speechify'); 
+  };
 
 
     return (
         <>
-            <div className="w-[70%] mx-auto flex flex-col items-center justify-center text-center">
+            <div className="w-[70%] relative h-auto mx-auto flex flex-col items-center justify-center text-center">
                 <h1 className='flex flex-wrap text-[4.5rem] font-normal right-[13rem] relative top-[8rem] bg-transparent w-[72%] leading-none'>
                     #1 Text to Speech Reader. <br />
                     Let Speechify Read To You.
                 </h1>
-                <button className="group relative bottom-[-15rem] right-[37rem] inline-flex items-center overflow-hidden rounded-[1rem] border-2 border-transparent bg-white px-[2rem] py-[1rem] text-[1.3rem] font-medium text-black hover:bg-black hover:text-white transition-colors duration-300 hover:px-[2rem] transition-all duration-300 ease-in-out">
+                <button
+                    onClick={handleClick}
+                className="group absolute z-30 bottom-[-17rem] right-[72rem] w-[12rem] inline-flex items-center overflow-hidden rounded-[1rem] border-2 border-transparent bg-white px-[2rem] py-[1rem] text-[1.3rem] font-medium text-black hover:bg-black hover:text-white transition-colors duration-300 hover:px-[2rem] transition-all duration-300 ease-in-out">
                     <span className="duration-400 ease absolute left-0 top-1/2 block h-0 w-full bg-[#2f43fa] opacity-100 transition-all group-hover:top-0 group-hover:h-full"></span>
                     <span className="ease absolute right-0 flex h-10 w-10 translate-x-full transform items-center justify-start duration-500 group-hover:-translate-x-[-1rem]">
                         <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,8 +67,8 @@ const Special = () => {
                 </button>
             </div>
             {/* The existing content below the hero section */}
-            <div className='w-[70%] h-[20rem] mt-[15rem] flex justify-between relative bottom-[4rem]'>
-                <div className='h-[7rem] mt-[12rem] w-[40%] flex flex-col justify-between items-start align-center px-[1rem]'>
+            <div className='w-[70%] h-[20rem] mt-[22rem] flex justify-between relative bottom-[4rem]'>
+                <div className='h-[7rem] mt-[12rem] ml-[-4rem] w-[40%] flex flex-col justify-between items-start align-center px-[1rem]'>
                     <div className='w-[32rem] h-[3rem] flex flex-row justify-between align-center items-center'>
                         <div className=' text-black w-[50%] h-full flex justify-around align-center items-center text-center'>
                             <img src={leftBracket} alt="error" />

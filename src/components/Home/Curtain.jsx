@@ -15,7 +15,7 @@ const Curtain = ({
   return (
     <div
       className={`
-        fixed top-0 left-0 w-full z-10 bg-[#1a1919] text-white h-[30rem] pl-[20rem] pr-[25rem] pt-[5rem] overflow-hidden flex items-center
+        fixed top-0 left-0 w-full z-50 bg-[#1a1919] text-white h-[35rem] pl-[20rem] pr-[25rem] pt-[5rem] overflow-hidden flex items-center
         transition-transform duration-700 ease-in-out
         ${showCurtain ? 'translate-y-0' : '-translate-y-full'}
       `}
@@ -42,7 +42,7 @@ const Curtain = ({
               </ul>
             </div>
           ) : (
-            <div className={`w-full animate-slide-up-fade-long ${images ? 'flex justify-between items-center' : 'flex justify-start items-start pt-[1rem]'}`}>
+            <div className={`w-[100rem] object-cover animate-slide-up-fade-long ${images ? 'flex justify-between object-cover items-center' : 'flex justify-start object-cover items-start pt-[1rem]'}`}>
               <ul className="text-left animate-slide-up-fade-long">
                 {items.map((text, idx) => (
                   <li key={idx} onMouseEnter={() => setHoveredLiIndex(idx)} onMouseLeave={() => setHoveredLiIndex(null)} className="cursor-pointer bg-transparent w-[25rem] text-[1.5rem] px-4 py-1 rounded-md hover:text-[#918f8f] transition-colors duration-300">
@@ -51,12 +51,12 @@ const Curtain = ({
                 ))}
               </ul>
               {images && (
-                <div className="w-[30rem] h-[20rem] relative overflow-hidden animate-slide-up-fade-long">
+                <div className="w-[35rem] h-[20rem] relative overflow-hidden animate-slide-up-fade-long">
                   {images.map((src, idx) => {
                     const isVisible = hoveredLiIndex === idx || (hoveredLiIndex === null && idx === 0);
                     return (
                       <img key={idx} src={src} alt={`curtain ${idx}`} className={`
-                        absolute inset-0 w-[30rem] h-[30rem] transition-opacity duration-500 ease-in-out
+                        absolute inset-0 w-[40rem] h-[30rem] transition-opacity duration-500 ease-in-out
                         ${isVisible ? 'opacity-100 z-10' : 'opacity-0 z-0'}
                         animate-slide-up-fade-long
                       `} style={{ transitionProperty: 'opacity' }} />

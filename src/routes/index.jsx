@@ -6,12 +6,14 @@ import CreateAccountForm from "../components/Login/CreateAccount";
 import ForgotPasswordForm from "../components/Login/ForgotPasswordForm";
 import UserDashboard from "../pages/UserDashboard";
 import AdminDashboard from "../pages/AdminDashboard";
+import Tryforfree from "../pages/Tryforfree.jsx";
 
 
 const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/try_speechify" element={<Tryforfree />} />
       <Route path="/login" element={<Login />} />
       <Route path="/library" element={<Library />} />
       <Route path="/create-account" element={<CreateAccountForm />} />

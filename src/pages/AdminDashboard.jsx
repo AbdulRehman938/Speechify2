@@ -228,22 +228,15 @@ const AdminDashboard = () => {
                         return; // Exit here as we don't need a default success toast after custom handling
 
                     case 'assignRoles':
-                        // Placeholder: Your apiEndPoints.js does NOT currently define UserAPI.assignRoles.
-                        // You will need to add a method like:
-                        // assignRoles: async (userId, role) => await patchRequest(`users/${userId}/role`, { role }),
-                        // or similar based on your Swagger.
-                        notifyError("UserAPI.assignRoles is not defined in apiEndPoints.js. Please implement it.");
-                        console.error("Attempted to call UserAPI.assignRoles which is undefined.");
-                        return;
+                        response = await UserAPI.assignRole(
+                            currentInputValues.userId,
+                            currentInputValues.role
+                        );
+                        break;
 
                     case 'deleteUsers':
-                        // Placeholder: Your apiEndPoints.js does NOT currently define UserAPI.deleteUsers.
-                        // You will need to add a method like:
-                        // deleteUser: async (userId) => await deleteRequest(`users/${userId}`),
-                        // or similar based on your Swagger.
-                        notifyError("UserAPI.deleteUsers is not defined in apiEndPoints.js. Please implement it.");
-                        console.error("Attempted to call UserAPI.deleteUsers which is undefined.");
-                        return;
+                        response = await UserAPI.deleteUser(currentInputValues.userId);
+                        break;
 
                     default:
                         notifyError("Unknown action type for API call.");
@@ -395,11 +388,12 @@ const AdminDashboard = () => {
 
             {/* Action Modal */}
             {activeAction && (
-                <ActionModal
-                    action={activeAction}
-                    onClose={handleCloseAction}
-                />
-            )}
+    <ActionModal
+        action={activeAction}
+        onClose={handleCloseAction}
+        onApiCall={activeAction.onApiCall} // Pass the callback if it exists
+    />
+)}
         </div>
     );
 };

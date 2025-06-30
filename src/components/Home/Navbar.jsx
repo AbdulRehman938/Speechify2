@@ -5,6 +5,9 @@ import speechifyLogo2 from "../../assets/icons/speechify-logo-v1.svg";
 
 const Navbar = ({ handleMouseEnter }) => {
   const navigate = useNavigate();
+    const handleClick = () => {
+    navigate('/try_speechify'); 
+  };
 
   return (
     <div className="fixed top-0 z-50 w-full flex flex-col items-center bg-black">
@@ -35,7 +38,9 @@ const Navbar = ({ handleMouseEnter }) => {
             log In
           </button>
 
-          <button className="group relative inline-flex items-center overflow-hidden rounded-[1rem] border-2 border-transparent bg-white px-[2rem] py-[0.5rem] text-[1rem] font-medium text-black hover:bg-black hover:text-white transition-colors duration-300 hover:px-[2rem] transition-all duration-300 ease-in-out">
+          <button 
+             onClick={handleClick}
+          className="group relative inline-flex items-center overflow-hidden rounded-[1rem] border-2 border-transparent bg-white px-[2rem] py-[0.5rem] text-[1rem] font-medium text-black hover:bg-black hover:text-white transition-colors duration-300 hover:px-[2rem] transition-all duration-300 ease-in-out">
             <span className="duration-400 ease absolute left-0 top-1/2 block h-0 w-full bg-[#2f43fa] opacity-100 transition-all group-hover:top-0 group-hover:h-full"></span>
             <span className="ease absolute right-0 flex h-10 w-10 translate-x-full transform items-center justify-start duration-500 group-hover:-translate-x-[-1rem]">
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

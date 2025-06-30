@@ -41,13 +41,21 @@ const CreateAccountForm = () => {
         return () => clearInterval(timerRef.current); // Cleanup on component unmount or state change
     }, [currentStep, timer]);
 
-    const notifyError = (message) => {
-        toast.error(message, {
-            position: 'top-right',
-            autoClose: 2000,
-            theme: 'colored',
-        });
-    };
+   const notifyError = (error) => {
+  let message =
+    error?.response?.data?.message ||
+    error?.response?.data?.error ||
+    error?.response?.data?.errors?.[0]?.msg ||
+    error?.message ||
+    'An unexpected error occurred.';
+
+  toast.error(message, {
+    position: 'top-right',
+    autoClose: 2000,
+    theme: 'colored',
+  });
+};
+
 
     const notifySuccess = (message) => {
         toast.success(message, {
@@ -110,7 +118,7 @@ const CreateAccountForm = () => {
 
                 const response = await AuthAPI.register(registrationPayload);
 
-                if (response.status === 200) {
+               if (response.status === 200 || response.status === 201) {
                     notifySuccess('Account created successfully! Sending OTP to your email.');
                     setEmailForOtp(values.email); // Store email for the next step
                     setCurrentStep('otpVerification'); // Transition to OTP step

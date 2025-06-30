@@ -3,6 +3,7 @@ import {
   getRequest,
   postRequest,
   putRequest,
+  patchRequest,
 } from "/src/libs/api/methods.js";
 
 // AUTH ENDPOINTS
@@ -42,7 +43,7 @@ export const LanguageAPI = {
     await getRequest(`language/view-language/${name}`),
   deleteLanguage: async (name) =>
     await deleteRequest(`language/delete-language/${name}`),
-  updateLanguage: async () =>
+  updateLanguage: async (body) =>
     await putRequest(`language/update-language`, body),
 };
 
@@ -53,13 +54,44 @@ export const ModelAPI = {
   getModel: async (name) => await getRequest(`model/view-model/${name}`),
   deleteModel: async (name) =>
     await deleteRequest(`model/delete-model/${name}`),
-  updateModel: async () => await putRequest(`model/update-model`, body),
+  updateModel: async (body) => await putRequest(`model/update-model`, body),
 };
 
-// USER ENDPOINTS
+// USER ENDPOINTS (Updated with all management endpoints)
 export const UserAPI = {
+  // Profile Management
   viewUsers: async () => await getRequest(`users/profile`),
-  updateProfile: async () => await putRequest(`users/profile`, body),
+  updateProfile: async (body) => await putRequest(`users/profile`, body),
   getTTSModelsByName: async (name) =>
-    await getRequest(`users/get-tts-model/{}`),
+    await getRequest(`users/get-tts-model/${name}`),
+
+  // User Management
+  getAllUsers: async () => await getRequest(`users`),
+  getUserById: async (userId) => await getRequest(`users/${userId}`),
+  createUser: async (body) => await postRequest(`users`, body),
+  updateUser: async (userId, body) => await putRequest(`users/${userId}`, body),
+  deleteUser: async (userId) => await deleteRequest(`users/${userId}`),
+
+  // Role Management
+  assignRole: async (userId, role) =>
+    await patchRequest(`users/${userId}/role`, { role }),
+  getAllRoles: async () => await getRequest(`users/roles`),
+
+  // Status Management
+  deactivateUser: async (userId) =>
+    await patchRequest(`users/${userId}/deactivate`),
+  activateUser: async (userId) =>
+    await patchRequest(`users/${userId}/activate`),
+
+  // Search/Filter
+  searchUsers: async (query) =>
+    await getRequest(`users/search?query=${encodeURIComponent(query)}`),
+  filterUsers: async (filters) =>
+    await getRequest(`users/filter?${new URLSearchParams(filters).toString()}`),
+
+  getAllUsers: async () => await getRequest(`users`),
+  getUserById: async (userId) => await getRequest(`users/${userId}`),
+  assignRole: async (userId, role) =>
+    await patchRequest(`users/${userId}/role`, { role }),
+  deleteUser: async (userId) => await deleteRequest(`users/${userId}`),
 };
