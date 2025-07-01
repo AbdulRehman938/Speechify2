@@ -1,8 +1,8 @@
 // Navbar.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { navItems } from '/src/constants/homeContent'; // Ensure path is correct
-import speechifyLogo2 from "../../assets/icons/speechify-logo-v1.svg";
+import { navItems } from '/src/constants/homeContent'; 
+import speechifyLogo2 from "../../assets/icons/studio-logo.svg";
 
 const Navbar = ({ handleMouseEnter }) => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const Navbar = ({ handleMouseEnter }) => {
         <img
           src={speechifyLogo2}
           alt="home-logo"
-          className="w-auto h-[2rem]"
+          className="w-auto h-[1.7rem]"
         />
 
         <div className="text-white text-[1rem] font-medium flex items-center gap-4 text-wrap">

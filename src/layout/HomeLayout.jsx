@@ -13,8 +13,6 @@ import FAQ from '../components/Home/FAQ';
 import Footer from '../components/Home/Footer';
 
 
-
-
 const HomeLayout = () => {
 
   const [hoveredIndex, setHoveredIndex] = useState(null);

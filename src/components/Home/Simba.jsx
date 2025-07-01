@@ -5,7 +5,7 @@ const Simba = () => {
     return (
         <>
             <div className='w-[75%] h-[25rem] bg-black flex flex-row justify-between align-center items-center mt-[8rem] border-t-[0.1rem] border-t-gray-700'>
-                <div className='h-full w-[45%] bg-black mt-[5rem]'>
+                <div className='h-full w-[45%] bg-black mt-[5rem] text-left'>
                     <h1 className='font-medium text-[4rem] leading-[4rem] text-white'>Introducing Our <br /> Text To Speech API</h1>
                     <p className='text-white text-[1.5rem] mt-[1rem]'>We're sharing an AI Voice API that delivers <br /> Speechify's most natural and beloved AI voices <br /> directly with developers</p>
                     <div className=' w-[50%] h-[3.5rem] mt-[2rem] flex flex-row justify-between align-center items-center'>

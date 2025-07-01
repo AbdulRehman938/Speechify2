@@ -7,12 +7,14 @@ import ForgotPasswordForm from "../components/Login/ForgotPasswordForm";
 import UserDashboard from "../pages/UserDashboard";
 import AdminDashboard from "../pages/AdminDashboard";
 import Tryforfree from "../pages/Tryforfree.jsx";
+import Generate from "../pages/Studio/Generate.jsx";
 
 
 const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/ai-voice-generator" element={<Generate />} />
       <Route path="/try_speechify" element={<Tryforfree />} />
       <Route path="/login" element={<Login />} />
       <Route path="/library" element={<Library />} />

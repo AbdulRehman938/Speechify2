@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import logo2 from "../../assets/icons/Speechify-logo2.svg"
+import logo2 from "../../assets/icons/Speechify-logo2.svg";
 import openeye from "../../assets/images/Openeye.svg";
 import closedeye from "../../assets/images/Closedeye.svg";
 
@@ -41,21 +41,20 @@ const CreateAccountForm = () => {
         return () => clearInterval(timerRef.current); // Cleanup on component unmount or state change
     }, [currentStep, timer]);
 
-   const notifyError = (error) => {
-  let message =
-    error?.response?.data?.message ||
-    error?.response?.data?.error ||
-    error?.response?.data?.errors?.[0]?.msg ||
-    error?.message ||
-    'An unexpected error occurred.';
+    const notifyError = (error) => {
+        let message =
+            error?.response?.data?.message ||
+            error?.response?.data?.error ||
+            error?.response?.data?.errors?.[0]?.msg ||
+            error?.message ||
+            'An unexpected error occurred.';
 
-  toast.error(message, {
-    position: 'top-right',
-    autoClose: 2000,
-    theme: 'colored',
-  });
-};
-
+        toast.error(message, {
+            position: 'top-right',
+            autoClose: 2000,
+            theme: 'colored',
+        });
+    };
 
     const notifySuccess = (message) => {
         toast.success(message, {
@@ -118,7 +117,8 @@ const CreateAccountForm = () => {
 
                 const response = await AuthAPI.register(registrationPayload);
 
-               if (response.status === 200 || response.status === 201) {
+                // Assuming a successful registration response has a status indicating success
+                if (response.status === 200 || response.status === 201) {
                     notifySuccess('Account created successfully! Sending OTP to your email.');
                     setEmailForOtp(values.email); // Store email for the next step
                     setCurrentStep('otpVerification'); // Transition to OTP step
@@ -138,9 +138,8 @@ const CreateAccountForm = () => {
                         // You might want to handle this more gracefully, perhaps stay on registration
                         // or allow resend without a successful initial send confirmation.
                     }
-
                 } else {
-                    notifyError("Something went wrong during registration.");
+                    notifyError(response.statusMessage || "Something went wrong during registration.");
                 }
             } catch (error) {
                 notifyError(
@@ -196,27 +195,36 @@ const CreateAccountForm = () => {
         }
     };
 
-    // Handler for OTP verification (you'll need to define AuthAPI.verifyOtp in apiEndPoints.js)
-    const handleVerifyOtp = async () => {
-        if (otp.length !== 6) {
-            notifyError("Please enter a 6-digit OTP.");
-            return;
+ const handleVerifyOtp = async () => {
+    if (otp.length !== 6) {
+        notifyError("Please enter a 6-digit OTP.");
+        return;
+    }
+    try {
+        const verificationResponse = await AuthAPI.verifyOtp({ email: emailForOtp, otp });
+        
+        if (verificationResponse.status === 200 || verificationResponse.status === 201) {
+            const token = verificationResponse.data?.token;
+            const userData = verificationResponse.data?.user;
+
+            if (token) {
+                // Store in localStorage (persists after tab close)
+                localStorage.setItem('authToken', token);
+                
+                if (userData) {
+                    localStorage.setItem('userData', JSON.stringify(userData));
+                }
+
+                notifySuccess('OTP verified successfully! Account created Successfully');
+                navigate('/login');
+            } else {
+                notifyError('OTP verified, but no token received from the server.');
+            }
         }
-        try {
-            // Placeholder: Call your actual verify OTP API here
-            // const response = await AuthAPI.verifyOtp({ email: emailForOtp, otp });
-            // For now, simulating success
-            notifySuccess('OTP verified successfully!');
-            setTimeout(() => navigate('/login'), 1000); // Redirect to login after successful OTP
-        } catch (error) {
-            notifyError(
-                error?.response?.data?.message ||
-                error?.message ||
-                'OTP verification failed. Please try again.'
-            );
-            setOtp(''); // Clear OTP on failure
-        }
-    };
+    } catch (error) {
+        notifyError(error?.message || 'OTP verification failed.');
+    }
+};
 
     // Format timer for display
     const formatTimer = (sec) => {

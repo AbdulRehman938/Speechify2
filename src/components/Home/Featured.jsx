@@ -143,13 +143,13 @@ const Featured = () => {
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key={'left-' + tabActiveIndex}
-                                className='w-[40%] h-full flex flex-col justify-start bg-black pt-[5rem] ]'
+                                className='w-[40%] h-full flex flex-col justify-start bg-black pt-[5rem] text-left]'
                                 initial={{ opacity: 0, x: -40 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -40 }}
                                 transition={{ duration: 0.5 }}
                             >
-                                <h2 className='text-3xl text-white font-bold mb-4'>{tabsWithIcons[tabActiveIndex].content.text}</h2>
+                                <h2 className='text-3xl text-left leading-[3rem] text-white font-bold mb-4'>{tabsWithIcons[tabActiveIndex].content.text}</h2>
                                 <button className="mt-8 px-6 py-3 bg-white text-black rounded-lg hover:bg-blue-700 transition-all duration-300 w-fit h-[3rem] flex items-center justify-center">
                                     {tabsWithIcons[tabActiveIndex].content.button ? (
                                         tabsWithIcons[tabActiveIndex].content.button

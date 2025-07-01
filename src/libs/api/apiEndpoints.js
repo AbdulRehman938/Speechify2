@@ -89,9 +89,16 @@ export const UserAPI = {
   filterUsers: async (filters) =>
     await getRequest(`users/filter?${new URLSearchParams(filters).toString()}`),
 
-  getAllUsers: async () => await getRequest(`users`),
-  getUserById: async (userId) => await getRequest(`users/${userId}`),
-  assignRole: async (userId, role) =>
-    await patchRequest(`users/${userId}/role`, { role }),
-  deleteUser: async (userId) => await deleteRequest(`users/${userId}`),
+
+  // TTS (Text to Speech) Generation
+generateTTS: async (body) =>
+  await postRequest(`users/synthesis-text-to-speech`, body),
+
+getTTSStatus: async (taskId) =>
+  await getRequest(`users/get-status/${taskId}`),
+
+// ✅ Aliases for compatibility with frontend naming
+synthesizeText: async (body) => await UserAPI.generateTTS(body),
+getSpeechStatus: async (taskId) => await UserAPI.getTTSStatus(taskId),
+
 };

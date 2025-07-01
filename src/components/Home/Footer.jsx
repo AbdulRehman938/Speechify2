@@ -10,7 +10,7 @@ import { PiCopyrightFill } from "react-icons/pi";
 const Footer = () => {
     return (
         <>
-            <div className='w-[75%] h-[80rem] bg-black relative bottom-0 mt-[15rem] flex flex-col justify-start align-center items-center border-t-[0.1rem] border-t-gray-700'>
+            <div className='w-[75%] h-[58rem] bg-black relative bottom-0 mt-[15rem] flex flex-col justify-start align-center items-center border-t-[0.1rem] border-t-gray-700'>
                 <div className='w-full h-[22rem] bg-black mt-[3rem] flex flex-row justify-between align-center items-center'>
                     <div className='bg-black w-[14.5rem] h-full flex flex-col justify-start align-start items-start text-start'>
                         <h2 className='text-gray-400 font-medium text-[1.3rem]'>Text to Speech</h2>
@@ -110,46 +110,6 @@ const Footer = () => {
                                 <li className='text-white text-[1.1rem] font-medium cursor-pointer hover:text-gray-400 hover:scale-[105%]'>Hindi Text to Speech</li>
                                 <li className='text-white text-[1.1rem] font-medium cursor-pointer hover:text-gray-400 hover:scale-[105%]'>AI Voice Generator</li>
                                 <li className='text-white text-[1.1rem] font-medium cursor-pointer hover:text-gray-400 hover:scale-[105%]'>Leitor de Texto</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div className='w-full h-[23rem] flex justify-start flex-col bg-black mt-[3rem]'>
-                    <h2 className='text-gray-300 font-medium text-[2.4rem]'>View in other languages</h2>
-                    <div className='w-full h-[14rem] flex flex-row mt-[1rem]'>
-                        <div className='bg-black flex flex-col justify-start align-start w-[24%] pt-[1rem]'>
-                            <ul className='flex flex-col justify-start align-start items-start gap-[0.5rem]'>
-                                <li className='text-white font-medium text-[1.3rem] cursor-pointer hover:text-gray-300 hover:scale-[110%]'>中文 (简体)</li>
-                                <li className='text-white font-medium text-[1.3rem] cursor-pointer hover:text-gray-300 hover:scale-[110%]'>Nederlands</li>
-                                <li className='text-white font-medium text-[1.3rem] cursor-pointer hover:text-gray-300 hover:scale-[110%]'>हिन्दी</li>
-                                <li className='text-white font-medium text-[1.3rem] cursor-pointer hover:text-gray-300 hover:scale-[110%]'>Norsk bokmål</li>
-                                <li className='text-white font-medium text-[1.3rem] cursor-pointer hover:text-gray-300 hover:scale-[110%]'>Español</li>
-                            </ul>
-                        </div>
-                        <div className='bg-black h-full flex flex-col justify-start align-start w-[24%]'>
-                            <ul className='flex flex-col justify-start align-start items-start gap-[0.5rem]'>
-                                <li className='text-white font-medium text-[1.3rem] cursor-pointer hover:text-gray-300 hover:scale-[110%]'>中文 (台灣)</li>
-                                <li className='text-white font-medium text-[1.3rem] cursor-pointer hover:text-gray-300 hover:scale-[110%]'>Français</li>
-                                <li className='text-white font-medium text-[1.3rem] cursor-pointer hover:text-gray-300 hover:scale-[110%]'>Italiano</li>
-                                <li className='text-white font-medium text-[1.3rem] cursor-pointer hover:text-gray-300 hover:scale-[110%]'>Polski</li>
-                                <li className='text-white font-medium text-[1.3rem] cursor-pointer hover:text-gray-300 hover:scale-[110%]'>Svenska</li>
-                            </ul>
-                        </div>
-                        <div className='bg-black h-full flex flex-col justify-start align-start w-[24%]'>
-                            <ul className='flex flex-col justify-start align-start items-start gap-[0.5rem]'>
-                                <li className='text-white font-medium text-[1.3rem] cursor-pointer hover:text-gray-300 hover:scale-[110%]'>Čeština</li>
-                                <li className='text-white font-medium text-[1.3rem] cursor-pointer hover:text-gray-300 hover:scale-[110%]'>Suomi</li>
-                                <li className='text-white font-medium text-[1.3rem] cursor-pointer hover:text-gray-300 hover:scale-[110%]'>日本語</li>
-                                <li className='text-white font-medium text-[1.3rem] cursor-pointer hover:text-gray-300 hover:scale-[110%]'>Português Brasileiro</li>
-                                <li className='text-white font-medium text-[1.3rem] cursor-pointer hover:text-gray-300 hover:scale-[110%]'>ไทย</li>
-                            </ul>
-                        </div>
-                        <div className='bg-black h-full flex flex-col justify-start align-start w-[24%]'>
-                            <ul className='flex flex-col justify-start align-start items-start gap-[0.5rem]'>
-                                <li className='text-white font-medium text-[1.3rem] cursor-pointer hover:text-gray-300 hover:scale-[110%]'>Dansk</li>
-                                <li className='text-white font-medium text-[1.3rem] cursor-pointer hover:text-gray-300 hover:scale-[110%]'>Duetsch</li>
-                                <li className='text-white font-medium text-[1.3rem] cursor-pointer hover:text-gray-300 hover:scale-[110%]'>한국어</li>
-                                <li className='text-white font-medium text-[1.3rem] cursor-pointer hover:text-gray-300 hover:scale-[110%]'>한국어</li>
                             </ul>
                         </div>
                     </div>

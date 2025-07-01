@@ -1,324 +1,309 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Header from '/src/components/Library/Header';
-import Content from '../../components/Library/Content';
-import doc from "../../assets/icons/doc.svg";
-import pdf from "../../assets/icons/pdf.svg";
-import text from "../../assets/icons/text.svg";
-import epub from "../../assets/icons/epub.svg";
-import drive from "../../assets/icons/drive.svg";
-import dropbox from "../../assets/icons/dropbox.svg";
-import cloud from "../../assets/icons/cloud.svg";
-import { RxText, RxCross2 } from "react-icons/rx";
-import { IoIosLink } from "react-icons/io";
-import { BsCamera } from "react-icons/bs";
-import { MdCreateNewFolder, MdOutlineFileUpload } from "react-icons/md";
-import { TbWorld } from "react-icons/tb";
-
+import React, { useState, useRef } from 'react';
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { MdOutlineFileDownload, MdOutlineTipsAndUpdates } from 'react-icons/md';
+import { IoMdPlay, IoMdPause } from 'react-icons/io';
+import Header from '../../components/Library/Header';
+import { UserAPI } from '../../libs/api/apiEndPoints.js'; // Ensure this path is correct
 
 const Library = () => {
-  const navigate = useNavigate();
-  const [contextMenuVisible, setContextMenuVisible] = useState(false);
-  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [selectedSpeed, setSelectedSpeed] = useState('1X');
+    const speedOptions = ['0.3X', '0.5X', '0.75X', '1X', '1.25X', '1.5X', '1.75X', '2X'];
 
-  const [showNewFolderModal, setShowNewFolderModal] = useState(false);
-  const [showUploadFileModal, setShowUploadFileModal] = useState(false);
-  const [showCreateTextModal, setShowCreateTextModal] = useState(false);
-  const [showPasteLinkModal, setShowPasteLinkModal] = useState(false);
+    const speakers = [
+        { name: 'John', gender: 'M', image: 'https://randomuser.me/api/portraits/men/32.jpg' },
+        { name: 'Emma', gender: 'F', image: 'https://randomuser.me/api/portraits/women/44.jpg' },
+        { name: 'Michael', gender: 'M', image: 'https://randomuser.me/api/portraits/men/76.jpg' },
+        { name: 'Sophia', gender: 'F', image: 'https://randomuser.me/api/portraits/women/22.jpg' },
+    ];
 
-  const [folderName, setFolderName] = useState('');
-  const [textTitle, setTextTitle] = useState('');
-  const [textContent, setTextContent] = useState('');
-  const [link, setLink] = useState('');
+    const [selectedSpeaker, setSelectedSpeaker] = useState(speakers[0]);
+    const [showDropdown2, setShowDropdown2] = useState(false);
+    const [text, setText] = useState('Create voice overs for Youtube videos, ads, corporate training, audiobooks, dubbing, or any use case you need.');
+    const [characterCount, setCharacterCount] = useState(text.length);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const audioElementRef = useRef(null); // Use a ref to store the audio element
 
-  const modalRef = useRef(null);
-  const fileInputRef = useRef(null);
-  const [dragging, setDragging] = useState(false);
+    const pollingTimeoutRef = useRef(null); // Ref to store the polling timeout ID
 
-  const isValidURL = (url) =>
-    /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-./?%&=]*)?$/.test(url);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        setShowNewFolderModal(false);
-        setShowUploadFileModal(false);
-        setShowCreateTextModal(false);
-        setShowPasteLinkModal(false);
-        setFolderName('');
-        setTextTitle('');
-        setTextContent('');
-        setLink('');
-      }
-    };
-    if (showNewFolderModal || showUploadFileModal || showCreateTextModal || showPasteLinkModal) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [showNewFolderModal, showUploadFileModal, showCreateTextModal, showPasteLinkModal]);
-
-  const handleContextMenu = (e) => {
-    e.preventDefault();
-    setMenuPosition({ x: e.pageX, y: e.pageY });
-    setContextMenuVisible(true);
-  };
-
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    handleFiles(files);
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setDragging(false);
-    const files = Array.from(e.dataTransfer.files);
-    handleFiles(files);
-  };
-
-  const handleFiles = (files) => {
-    const allowedTypes = ['application/pdf', 'application/msword', 'text/plain', 'application/epub+zip'];
-    files.forEach((file) => {
-      if (allowedTypes.includes(file.type)) {
-        console.log("Accepted file:", file.name);
-      } else {
-        alert(`${file.name} is not a supported file type.`);
-      }
+    const [showLangDropdown, setShowLangDropdown] = useState(false);
+    const [selectedLang, setSelectedLang] = useState({
+        country: 'US',
+        language: 'English',
+        accent: 'Standard',
     });
-  };
 
-  return (
-    <div
-      className="relative flex flex-col items-center justify-center h-screen w-auto bg-white"
-      onContextMenu={handleContextMenu}
-      onClick={() => setContextMenuVisible(false)}
-    >
-      <Header navigate={navigate} />
-      <Content
-        onTriggerCreateText={() => setShowCreateTextModal(true)}
-        onTriggerPasteLink={() => setShowPasteLinkModal(true)}
-      />
+    const languages = [
+        { country: 'US', language: 'English', accent: 'Standard' },
+        { country: 'UK', language: 'English', accent: 'British' },
+        { country: 'AU', language: 'English', accent: 'Australian' },
+        { country: 'FR', language: 'French', accent: 'Parisian' },
+        { country: 'IN', language: 'Hindi', accent: 'Neutral' },
+    ];
+
+    const handleTextChange = (e) => {
+        const input = e.target.value;
+        if (input.length <= 500) {
+            setText(input);
+            setCharacterCount(input.length);
+        }
+    };
+
+    const handleSetTemplate = (template) => {
+        let content = '';
+        if (template === 'Podcast') {
+            content = 'Welcome to our podcast. In today’s episode, we’ll explore emerging trends and discuss their impact.';
+        } else if (template === 'Youtube') {
+            content = 'Hey everyone! Welcome back to the channel. Don’t forget to like and subscribe for more videos like this!';
+        } else if (template === 'Training') {
+            content = 'This training session is designed to guide you through the basics and ensure you gain essential skills.';
+        }
+        setText(content);
+        setCharacterCount(content.length);
+    };
+
+    // Function to stop any current playback and clear polling
+    const stopAudioAndPolling = () => {
+        if (audioElementRef.current) {
+            audioElementRef.current.pause();
+            audioElementRef.current.currentTime = 0;
+            audioElementRef.current = null; // Clear the ref
+        }
+        if (pollingTimeoutRef.current) {
+            clearTimeout(pollingTimeoutRef.current);
+            pollingTimeoutRef.current = null;
+        }
+        setIsPlaying(false);
+        setLoading(false);
+    };
+
+    const handlePlay = async () => {
+        // If already playing, stop and return
+        if (isPlaying || loading) {
+            stopAudioAndPolling();
+            return; // Stop if already playing/loading to act as pause/cancel
+        }
+
+        setLoading(true); // Start loading animation
+        stopAudioAndPolling(); // Ensure any previous audio/polling is stopped
+
+        try {
+            // Step 1: Call the synthesizeText API
+            const synthesisPayload = {
+                text: text,
+                modelType: 'tts_models',
+                languageCode: 'en',
+                datasetCode: 'ljspeech',
+                modelName: 'tacotron2-DDC',
+            };
+
+            console.log("Sending synthesis request with payload:", synthesisPayload);
+            const synthesisResponse = await UserAPI.synthesizeText(synthesisPayload);
+            console.log("Synthesis initial response:", synthesisResponse);
+
+            const taskId = synthesisResponse.taskId;
+
+            if (!taskId) {
+                throw new Error('No taskId returned from synthesis API. Response:', synthesisResponse);
+            }
+
+            // Step 2: Start polling for status
+            const pollStatus = async (currentTaskId) => {
+                try {
+                    console.log(`Polling status for taskId: ${currentTaskId}`);
+                    const statusRes = await UserAPI.getSpeechStatus(currentTaskId);
+                    console.log("Synthesis status response:", statusRes);
+
+                    if (statusRes?.status === 'completed' && statusRes.file) {
+                        const audioBaseUrl = 'https://1ab7-203-128-20-20.ngrok-free.app/audio/'; // Your base URL
+                        const audioUrl = `${audioBaseUrl}${statusRes.file}`;
+
+                        const audio = new Audio(audioUrl);
+                        audioElementRef.current = audio; // Store the audio element in the ref
+
+                        audio.play()
+                            .then(() => {
+                                setLoading(false);
+                                setIsPlaying(true);
+                                console.log("Audio playing:", audioUrl);
+                                // Polling stops as audio is now playing
+                                if (pollingTimeoutRef.current) {
+                                    clearTimeout(pollingTimeoutRef.current);
+                                    pollingTimeoutRef.current = null;
+                                }
+                            })
+                            .catch((playError) => {
+                                console.error("Error playing audio:", playError);
+                                alert("Failed to play audio. Check your browser's autoplay policies or network.");
+                                stopAudioAndPolling(); // Clean up on play error
+                            });
+
+                        audio.onended = () => {
+                            console.log("Audio ended.");
+                            setIsPlaying(false);
+                            audioElementRef.current = null; // Clear ref when audio ends
+                        };
+
+                        audio.onerror = (e) => {
+                            console.error("Audio element error:", e);
+                            alert("An error occurred during audio playback.");
+                            stopAudioAndPolling(); // Clean up on audio element error
+                        };
+
+                    } else if (statusRes?.status === 'failed' || statusRes?.status === 'error') {
+                        throw new Error(`Speech synthesis failed: ${statusRes.message || 'Unknown error'}`);
+                    } else {
+                        // Continue polling if not completed or failed
+                        console.log("Synthesis still in progress, re-polling...");
+                        // Clear any existing timeout before setting a new one to prevent multiple loops
+                        if (pollingTimeoutRef.current) {
+                            clearTimeout(pollingTimeoutRef.current);
+                        }
+                        pollingTimeoutRef.current = setTimeout(() => pollStatus(currentTaskId), 2000); // Poll every 2 seconds
+                    }
+                } catch (pollErr) {
+                    console.error("Polling error for taskId:", currentTaskId, pollErr);
+                    setLoading(false);
+                    setIsPlaying(false);
+                    alert(`Failed to retrieve audio: ${pollErr.message}`);
+                    if (pollingTimeoutRef.current) {
+                        clearTimeout(pollingTimeoutRef.current);
+                        pollingTimeoutRef.current = null;
+                    }
+                }
+            };
+
+            // Start the polling process with the obtained taskId
+            pollStatus(taskId);
+
+        } catch (err) {
+            console.error('Synthesis request initiation error:', err);
+            setLoading(false);
+            setIsPlaying(false);
+            alert(`Failed to initiate speech synthesis: ${err.message}`);
+            stopAudioAndPolling(); // Ensure everything is reset on initial API call failure
+        }
+    };
 
 
-      {/* Right Click Context Menu */}
-      {contextMenuVisible && (
-        <ul
-          className="absolute w-[12rem] bg-white text-black rounded-md shadow-2xl z-50 py-2 rounded-[2rem]"
-          style={{ top: menuPosition.y, left: menuPosition.x }}
-        >
-          <li className="px-4 py-2 hover:bg-gray-200 rounded-[0.5rem] cursor-pointer border-b-[0.1rem] border-gray-300 flex justify-start align-center items-center gap-[0.5rem]" onClick={() => { setShowNewFolderModal(true); setContextMenuVisible(false); }}>
-            <MdCreateNewFolder className='text-[1.3rem]' />
-            New folder
-          </li>
-          <li className="px-4 py-2 hover:bg-gray-200 rounded-[0.5rem] cursor-pointer flex justify-start align-center items-center gap-[0.5rem]" onClick={() => { setShowUploadFileModal(true); setContextMenuVisible(false); }}>
-            <MdOutlineFileUpload className='text-[1.3rem]' />
-            Upload file
-          </li>
-          <li className="px-4 py-2 hover:bg-gray-200 rounded-[0.5rem] cursor-pointer flex justify-start align-center items-center gap-[0.5rem]" onClick={() => { setShowCreateTextModal(true); setContextMenuVisible(false); }}>
-            <RxText className='text-[1.3rem]' />
-            Create text
-          </li>
-          <li className="px-4 py-2 hover:bg-gray-200 rounded-[0.5rem] cursor-pointer flex justify-start align-center items-center gap-[0.5rem]" onClick={() => { setShowPasteLinkModal(true); setContextMenuVisible(false); }}>
-            <TbWorld className='text-[1.3rem]' />
-            Paste link
-          </li>
-        </ul>
-      )}
+    return (
+        <div className="flex flex-col justify-center items-center h-full w-full bg-white px-4">
+            <div className="w-full max-w-[120rem] flex flex-col items-center gap-6">
+                <Header />
 
-      {/* --- Modals Below --- */}
+                <div className='w-[40rem] h-[40rem] bg-gradient-to-b from-[#fb923c] to-[#2f43fa] rounded-full absolute z-[0] left-[5rem] top-[5rem] blur-[5rem] opacity-[80%]'></div>
+                <div className='w-[40rem] h-[40rem] bg-gradient-to-b from-[#fb923c] to-[#2f43fa] rounded-full absolute z-[0] right-[14rem] top-[16rem] blur-[5rem] opacity-[80%]'></div>
 
-      {/* New Folder Modal */}
-      {showNewFolderModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-          <div ref={modalRef} className="bg-white rounded-lg p-6 w-[35rem] h-[15rem] shadow-lg relative">
-            <button className="absolute top-3 right-4 text-2xl font-bold text-gray-500 hover:text-black" onClick={() => setShowNewFolderModal(false)}>
-              ×
-            </button>
-            <h2 className="text-3xl font-semibold text-gray-800 mb-4 mt-[1rem]">Create New Folder</h2>
-            <input
-              type="text"
-              value={folderName}
-              onChange={(e) => setFolderName(e.target.value)}
-              placeholder="Folder Name"
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-            />
-            <div className="flex justify-end gap-4">
-              <button onClick={() => setShowNewFolderModal(false)} className="px-4 py-2 bg-gray-300 rounded-md text-gray-800 hover:bg-gray-400">
-                Cancel
-              </button>
-              <button
-                disabled={folderName.trim().length < 1}
-                onClick={() => {
-                  console.log("Folder Created:", folderName);
-                  setShowNewFolderModal(false);
-                  setFolderName('');
-                }}
-                className={`px-4 py-2 rounded-md text-white font-semibold ${folderName.trim().length > 0 ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-100 cursor-not-allowed'
-                  }`}
-              >
-                Create
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+                <h1 className='text-[3rem] text-black font-medium mt-36 text-center'>Enter text to create Magic with Speechify AI Models</h1>
+                <span className='font-medium text-black text-xl flex justify-center items-center gap-[0.5rem] text-center'>
+                    <MdOutlineTipsAndUpdates className='text-yellow-500 text-2xl' />
+                    Pro tip: Try using “Podcast” mode with 1.5x speed for best narration quality.
+                </span>
 
-      {/* Upload File Modal */}
-      {showUploadFileModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div ref={modalRef} className="bg-white w-[45rem] h-[48rem] rounded-[1rem] p-[2rem] relative" onClick={(e) => e.stopPropagation()}>
-            <RxCross2 className="absolute top-4 right-4 text-[1.5rem] cursor-pointer text-gray-600 hover:text-red-500" onClick={() => setShowUploadFileModal(false)} />
+                <div className='bg-white w-[55%] h-[35rem] relative top-[4rem] rounded-[2rem] flex flex-col align-center justify-start items-center p-[1rem] shadow-lg shadow-black '>
+                    {/* Top Controls */}
+                    <div className='w-full h-[3rem] bg-white over-hidden flex flex-row justify-between align-center items-center'>
+                        <div className='w-[40%] h-full flex flex-row justify-start gap-[1rem] align-center items-center'>
+                            {/* Speaker Button */}
+                            <div className='relative h-full bg-white w-[11rem] border-gray-300 border-[0.13rem] flex flex-row justify-between align-center items-center px-2 py-1 rounded-[1rem] cursor-pointer hover:bg-gray-100' onClick={() => setShowDropdown(!showDropdown)}>
+                                <img src={selectedSpeaker.image} alt="speaker" className="w-8 h-8 rounded-full object-cover" />
+                                <div className="ml-2 text-sm flex flex-row gap-[.3rem]">
+                                    <span className="font-normal text-black text-xl">{selectedSpeaker.name}</span>
+                                    <span className="text-xl font-medium text-black">({selectedSpeaker.gender})</span>
+                                </div>
+                                <div className="ml-auto px-1 text-black">
+                                    {showDropdown ? <FaChevronUp className="w-3 h-3" /> : <FaChevronDown className="w-3 h-3" />}
+                                </div>
+                                {showDropdown && (
+                                    <ul className="absolute top-[110%] left-0 w-[11rem] bg-white border-gray-300 border-[0.13rem] rounded-[1rem] z-10 shadow-lg">
+                                        {speakers.filter((s) => s.name !== selectedSpeaker.name).map((speaker, idx) => (
+                                            <li key={idx} className="flex flex-row items-center gap-2 px-3 py-2 cursor-pointer hover:bg-gray-100 rounded-[1rem]" onClick={() => { setSelectedSpeaker(speaker); setShowDropdown(false); }}>
+                                                <img src={speaker.image} alt={speaker.name} className="w-8 h-8 rounded-full object-cover" />
+                                                <div className="flex flex-row text-sm gap-[0.3rem]">
+                                                    <span className="font-normal text-black text-xl">{speaker.name}</span>
+                                                    <span className="text-xl font-medium text-black">({speaker.gender})</span>
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
 
-            {/* File Drop Area */}
-            <div
-              onClick={() => fileInputRef.current.click()}
-              onDrop={handleDrop}
-              onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
-              onDragLeave={() => setDragging(false)}
-              className={`w-[30rem] h-[15rem] flex flex-col justify-center items-center border-dashed border-[0.2rem] mt-[1rem] rounded-[1rem] ${dragging ? 'border-blue-500 bg-blue-50' : 'border-gray-500'
-                }`}
-            >
-              <input type="file" accept=".pdf,.doc,.txt,.epub" ref={fileInputRef} onChange={handleFileChange} multiple hidden />
-              <div className="w-[20rem] h-[3.5rem] flex justify-around items-center">
-                <img src={pdf} alt="pdf" className="h-full opacity-40" />
-                <img src={doc} alt="doc" className="h-full opacity-40" />
-                <img src={text} alt="text" className="h-full opacity-40" />
-                <img src={epub} alt="epub" className="h-full opacity-40" />
-              </div>
-              <p className="font-medium text-gray-500">Drop files here to upload, or</p>
-              <button className="bg-blue-700 text-white font-bold p-[1rem] px-[2rem] rounded-[1rem] hover:bg-blue-800 hover:scale-[105%]">
-                Select File
-              </button>
-            </div>
+                            {/* Speed Button */}
+                            <div className='relative h-full bg-white w-[9rem] border-gray-300 border-[0.13rem] flex flex-row justify-between align-center items-center px-2 py-1 rounded-[1rem] cursor-pointer hover:bg-gray-100' onClick={() => setShowDropdown2(!showDropdown2)}>
+                                <div className="ml-2 text-sm flex flex-row gap-[.3rem]">
+                                    <span className="font-normal text-black text-xl">Speed:</span>
+                                    <span className="font-medium text-black text-xl">{selectedSpeed}</span>
+                                </div>
+                                <div className="ml-auto px-1 text-black">
+                                    {showDropdown2 ? <FaChevronUp className="w-3 h-3" /> : <FaChevronDown className="w-3 h-3" />}
+                                </div>
+                                {showDropdown2 && (
+                                    <ul className="absolute top-[110%] left-0 w-[11rem] bg-white border-gray-300 border-[0.13rem] rounded-[1rem] z-10 shadow-lg">
+                                        {speedOptions.filter((speed) => speed !== selectedSpeed).map((speed, idx) => (
+                                            <li key={idx} className="px-3 py-2 cursor-pointer hover:bg-gray-100 rounded-[1rem] text-black text-sm text-left" onClick={() => { setSelectedSpeed(speed); setShowDropdown2(false); }}>{speed}</li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        </div>
 
-            {/* Import From */}
-            <div className="mt-8">
-              <h1 className="text-xl font-medium text-gray-700">Import from</h1>
-              <div className="flex gap-4 mt-4">
-                {[{ img: drive, label: 'Google Drive' }, { img: dropbox, label: 'Dropbox' }, { img: cloud, label: 'OneDrive' }].map(({ img, label }) => (
-                  <div key={label} className="w-[14rem] h-[6rem] bg-[#f5f5fa] rounded-[1rem] flex flex-col items-start p-[0.5rem] gap-[0.3rem] cursor-pointer hover:bg-[#f6f6f6] hover:scale-[95%] transition-all">
-                    <img src={img} alt={label} className="w-[2.5rem] h-[2.5rem]" />
-                    <p className="text-[1.1rem] font-medium">{label}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+                        {/* Download & Play Buttons */}
+                        <div className='w-[40%] h-full flex flex-row justify-end gap-[1rem] align-center items-center'>
+                            <div className='h-full w-[10rem] gap-[0.4rem] bg-white text-black border-gray-300 border-[0.1rem] rounded-[1rem] p-[1rem] flex justify-center align-center items-center hover:bg-gray-200 cursor-pointer'>
+                                <MdOutlineFileDownload className='text-3xl' />
+                                <span className='font-medium'>Download</span>
+                            </div>
+                            <div id='play' onClick={handlePlay} className='h-full gap-[0.5rem] w-[10rem] bg-[#2f43fa] text-white rounded-[1rem] p-[1rem] flex justify-center align-center items-center hover:bg-[#1524ad] cursor-pointer'>
+                                {loading ? (
+                                    <div className='w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin'></div>
+                                ) : isPlaying ? (
+                                    <IoMdPause className='text-2xl' />
+                                ) : (
+                                    <IoMdPlay className='text-2xl' />
+                                )}
+                                <span className='font-medium text-2xl'>{loading ? 'Loading' : isPlaying ? 'Pause' : 'Play'}</span>
+                            </div>
+                        </div>
+                    </div>
 
-            {/* Create New */}
-            <div className="mt-10">
-              <h1 className="text-xl font-medium text-gray-700">Create New</h1>
-              <div className="flex gap-4 mt-4">
-                <div
-                  className="w-[14rem] h-[6rem] bg-[#f5f5fa] rounded-[1rem] flex flex-col items-start p-[0.5rem] gap-[0.3rem] cursor-pointer hover:bg-[#f6f6f6] hover:scale-[95%] transition-all"
-                  onClick={() => {
-                    setShowUploadFileModal(false);
-                    setShowCreateTextModal(true);
-                  }}
-                >
-                  <div className="text-[2rem]"><RxText /></div>
-                  <p className="text-[1.1rem] font-medium">Text Note</p>
+                    {/* Text Area */}
+                    <div className='w-full h-[23rem] bg-white mt-[2rem]'>
+                        <textarea name="input" id="speech" value={text} onChange={handleTextChange} className='text-2xl font-normal text-black w-full h-full resize-none overflow-y-auto outline-none border-none focus:outline-none focus:ring-0' />
+                    </div>
+
+                    {/* Bottom Controls */}
+                    <div className='w-full h-[3rem] bg-white mt-[2rem] flex flex-row justify-between align-center items-center text-center'>
+                        <div className='h-full w-[30rem] bg-white flex flex-row justify-start align-center items-center gap-[0.5rem]'>
+                            <div className='relative h-full'>
+                                <div className='h-full w-[9rem] bg-gray-300 text-black rounded-[1rem] border-gray-200 flex flex-row justify-around items-center align-center border-[0.1rem] hover:bg-gray-400 cursor-pointer' onClick={() => setShowLangDropdown(!showLangDropdown)}>
+                                    <span className='font-xs text-black'>{selectedLang.country}</span>
+                                    <span className='text-xl text-black'>{selectedLang.language}</span>
+                                    <FaChevronDown className="w-3 h-3" />
+                                </div>
+                                {showLangDropdown && (
+                                    <ul className="absolute bottom-[110%] left-0 w-[17rem] bg-white border border-gray-300 rounded-[1rem] shadow-md z-50">
+                                        {languages.filter((lang) => lang.country !== selectedLang.country || lang.language !== selectedLang.language || lang.accent !== selectedLang.accent).map((lang, idx) => (
+                                            <li key={idx} className="px-3 py-2 text-black text-sm hover:bg-gray-100 cursor-pointer rounded-[1rem]" onClick={() => { setSelectedLang(lang); setShowLangDropdown(false); }}>
+                                                {lang.country} - {lang.language} ({lang.accent})
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                            <div onClick={() => handleSetTemplate('Podcast')} className='h-full w-[7rem] bg-gray-300 text-black rounded-[1rem] border-gray-200 flex justify-center items-center border-[0.1rem] hover:bg-gray-400 cursor-pointer'>Podcast</div>
+                            <div onClick={() => handleSetTemplate('Youtube')} className='h-full w-[7rem] bg-gray-300 text-black rounded-[1rem] border-gray-200 flex justify-center items-center border-[0.1rem] hover:bg-gray-400 cursor-pointer'>Youtube</div>
+                            <div onClick={() => handleSetTemplate('Training')} className='h-full w-[7rem] bg-gray-300 text-black rounded-[1rem] border-gray-200 flex justify-center items-center border-[0.1rem] hover:bg-gray-400 cursor-pointer'>Training</div>
+                        </div>
+                        <div className='h-full w-[10rem] bg-white text-black flex justify-center items-center text-lg'>
+                            {characterCount}/500 characters
+                        </div>
+                    </div>
                 </div>
-                <div
-                  className="w-[14rem] h-[6rem] bg-[#f5f5fa] rounded-[1rem] flex flex-col items-start p-[0.5rem] gap-[0.3rem] cursor-pointer hover:bg-[#f6f6f6] hover:scale-[95%] transition-all"
-                  onClick={() => {
-                    setShowUploadFileModal(false);
-                    setShowPasteLinkModal(true);
-                  }}
-                >
-                  <div className="text-[2rem]"><IoIosLink /></div>
-                  <p className="text-[1.1rem] font-medium">Paste Link</p>
-                </div>
-                <div className="w-[14rem] h-[6rem] bg-[#f5f5fa] rounded-[1rem] flex flex-col items-start p-[0.5rem] gap-[0.3rem] cursor-pointer hover:bg-[#f6f6f6] hover:scale-[95%] transition-all">
-                  <div className="text-[2rem]"><BsCamera /></div>
-                  <p className="text-[1.1rem] font-medium">Use Camera</p>
-                </div>
-              </div>
             </div>
-          </div>
         </div>
-      )}
-
-
-      {/* Create Text Modal */}
-      {showCreateTextModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-          <div ref={modalRef} className="bg-white rounded-lg p-6 w-[40rem] shadow-lg relative">
-            <button className="absolute top-3 right-4 text-2xl font-bold text-gray-500 hover:text-black" onClick={() => setShowCreateTextModal(false)}>
-              ×
-            </button>
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Create New Text</h2>
-            <input
-              type="text"
-              value={textTitle}
-              onChange={(e) => setTextTitle(e.target.value)}
-              placeholder="Enter title"
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-            />
-            <textarea
-              value={textContent}
-              onChange={(e) => setTextContent(e.target.value)}
-              placeholder="Write your text here..."
-              className="w-full h-[25rem] p-3 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-            />
-            <div className="flex justify-end gap-4">
-              <button onClick={() => setShowCreateTextModal(false)} className="px-4 py-2 bg-gray-300 rounded-md text-gray-800 hover:bg-gray-400">
-                Cancel
-              </button>
-              <button
-                disabled={textTitle.trim() === '' || textContent.trim() === ''}
-                onClick={() => {
-                  console.log("Text Created:", { title: textTitle, content: textContent });
-                  setShowCreateTextModal(false);
-                  setTextTitle('');
-                  setTextContent('');
-                }}
-                className={`px-4 py-2 rounded-md text-white font-semibold ${textTitle && textContent ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-100 cursor-not-allowed'
-                  }`}
-              >
-                Create
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Paste Link Modal */}
-      {showPasteLinkModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-          <div ref={modalRef} className="bg-white rounded-lg p-6 w-[40rem] h-[20rem] shadow-lg relative">
-            <button className="absolute top-3 right-4 text-2xl font-bold text-gray-500 hover:text-black" onClick={() => setShowPasteLinkModal(false)}>
-              ×
-            </button>
-            <h2 className="text-xl font-semibold text-gray-800 mt-[2rem] mb-[2rem]">Paste Web Link</h2>
-            <input
-              type="text"
-              value={link}
-              onChange={(e) => setLink(e.target.value)}
-              placeholder="Paste a valid URL"
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-            />
-            <div className="flex justify-end gap-4">
-              <button onClick={() => setShowPasteLinkModal(false)} className="px-4 py-2 bg-gray-300 rounded-md text-gray-800 hover:bg-gray-400">
-                Cancel
-              </button>
-              <button
-                disabled={!isValidURL(link.trim())}
-                onClick={() => {
-                  console.log("Link Submitted:", link);
-                  setShowPasteLinkModal(false);
-                  setLink('');
-                }}
-                className={`px-4 py-2 rounded-md text-white font-semibold ${isValidURL(link.trim()) ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-100 cursor-not-allowed'
-                  }`}
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-
-        </div>
-      )}
-    </div>
-  );
+    );
 };
 
 export default Library;

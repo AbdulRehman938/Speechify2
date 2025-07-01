@@ -7,9 +7,9 @@ import SocialLoginButtons from './SocialLoginButtons';
 import FormInput from './FormInput';
 import { fullLoginSchema } from '/src/validation/loginSchema.js';
 import { AuthAPI } from '/src/libs/api/apiEndpoints';
-import logo2 from "../../assets/icons/Speechify-logo2.svg"
+import logo2 from "../../assets/icons/Speechify-logo2.svg";
 const openeye = new URL('../../assets/images/Openeye.svg', import.meta.url).href;
-const closedeye = new URL ('../../assets/images/Closedeye.svg', import.meta.url).href;
+const closedeye = new URL('../../assets/images/Closedeye.svg', import.meta.url).href;
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -17,6 +17,14 @@ const LoginForm = () => {
 
   const notifyError = (message) => {
     toast.error(message, {
+      position: 'top-right',
+      autoClose: 2000,
+      theme: 'colored'
+    });
+  };
+
+  const notifySuccess = (message) => { // Added notifySuccess for completeness
+    toast.success(message, {
       position: 'top-right',
       autoClose: 2000,
       theme: 'colored'
@@ -38,29 +46,40 @@ const LoginForm = () => {
       try {
         const response = await AuthAPI.login(values);
 
-        // Check if user exists in response
-        if (!response.data || !response.data.user) {
-          toast.error('User does not exist, create an account', {
-            position: 'top-right',
-            autoClose: 2000,
-            theme: 'colored',
-          });
-          return;
-        }
+        // --- START OF CRITICAL CHANGE ---
+        // Log the full response to inspect it in your browser's console
+        console.log('AuthAPI.login Response:', response);
 
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+        // Check the HTTP status code from the response
+        if (response.status === 200) { // Assuming 200 OK for successful login
+          // Now that we know it's a success, check if the expected data is present
+          if (response.data && response.data.token && response.data.user) {
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+            notifySuccess('Login successful!'); // Add a success toast!
 
-        if (response.data.user.role === 'admin' || response.data.user.role === 'superadmin') {
-          navigate('/admin-dashboard');
+            if (response.data.user.role === 'admin' || response.data.user.role === 'superadmin') {
+              navigate('/admin-dashboard');
+            } else {
+              navigate('/library');
+            }
+          } else {
+            // This means the API returned 200, but the data structure was unexpected
+            notifyError('Login successful, but missing token or user data in response.');
+          }
         } else {
-          navigate('/library');
+          // If status is NOT 200, it's an error. Use the statusMessage from methods.js
+          // This will correctly show messages like "Invalid credentials" or "User not found"
+          notifyError(response.statusMessage || 'Login failed: An unexpected error occurred.');
         }
+        // --- END OF CRITICAL CHANGE ---
+
       } catch (error) {
+        // This catch block is for network errors or errors not structured by methods.js errorHandler
         notifyError(
-          error?.response?.data?.message ||
+          error?.statusMessage || // Prioritize message from our error handler
           error?.message ||
-          'Login failed'
+          'Login failed due to an unexpected client-side error.'
         );
       }
     },

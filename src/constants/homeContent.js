@@ -31,7 +31,7 @@ export const curtainContentsMap = {
 
 export const navItems = [
   'Text to Speech',
-  'AI Voice Generator',
+  'AI Voice Generation',
   'TTSAPI',
   'Solutions',
   'Students',
