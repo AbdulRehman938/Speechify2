@@ -2,14 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import logo2 from "../../assets/icons/Speechify-logo2.svg";
-import openeye from "../../assets/images/Openeye.svg";
-import closedeye from "../../assets/images/Closedeye.svg";
-
+import logo2 from '/src/assets/icons/Speechify-logo2.svg';
+import openeye from '/src/assets/images/Openeye.svg';
+import closedeye from '/src/assets/images/Closedeye.svg';
 import FormInput from './FormInput';
 import { registerSchema } from '/src/validation/loginSchema.js';
-import { AuthAPI, ImageAPI } from '/src/libs/api/apiEndpoints';
+import { AuthAPI, ImageAPI } from '/src/libs/api/apiEndpoints.js';
 
 const OTP_TIMER = 600; // 10 minutes in seconds
 
@@ -117,30 +115,46 @@ const CreateAccountForm = () => {
 
                 const response = await AuthAPI.register(registrationPayload);
 
-                // Assuming a successful registration response has a status indicating success
+                // --- START OF MODIFIED LOGIC ---
+                // Save token and user data to localStorage immediately after successful registration
                 if (response.status === 200 || response.status === 201) {
-                    notifySuccess('Account created successfully! Sending OTP to your email.');
-                    setEmailForOtp(values.email); // Store email for the next step
-                    setCurrentStep('otpVerification'); // Transition to OTP step
-                    setTimer(OTP_TIMER); // Start the timer
-                    setCanResend(false); // Disable resend initially
+                    const token = response.data?.token;
+                    const userData = response.data?.user;
 
-                    // Immediately call verify-email API after successful registration
-                    try {
-                        await AuthAPI.verifyEmail({ email: values.email });
-                        notifySuccess("OTP sent to your email!");
-                    } catch (otpError) {
-                        notifyError(
-                            otpError?.response?.data?.message ||
-                            otpError?.message ||
-                            "Failed to send OTP. Please try resending."
-                        );
-                        // You might want to handle this more gracefully, perhaps stay on registration
-                        // or allow resend without a successful initial send confirmation.
+                    if (token && userData) { // Ensure both token and user data are present
+                        localStorage.setItem('authToken', token);
+                        localStorage.setItem('userData', JSON.stringify(userData));
+                        notifySuccess('Account created successfully! Sending OTP to your email.');
+
+                        setEmailForOtp(values.email); // Store email for the next step
+                        setCurrentStep('otpVerification'); // Transition to OTP step
+                        setTimer(OTP_TIMER); // Start the timer
+                        setCanResend(false); // Disable resend initially
+
+                        // Immediately call verify-email API after successful registration to send OTP
+                        try {
+                            await AuthAPI.verifyEmail({ email: values.email });
+                            notifySuccess("OTP sent to your email!");
+                        } catch (otpError) {
+                            notifyError(
+                                otpError?.response?.data?.message ||
+                                otpError?.message ||
+                                "Failed to send OTP. Please try resending."
+                            );
+                            // You might want to handle this more gracefully, perhaps stay on registration
+                            // or allow resend without a successful initial send confirmation.
+                        }
+                    } else {
+                        // Handle case where registration was 200/201 but missing token/user data
+                        notifyError("Registration successful, but missing authentication data. Please try logging in.");
+                        // Optionally navigate to login here if no token is received
+                        // navigate('/login');
                     }
                 } else {
                     notifyError(response.statusMessage || "Something went wrong during registration.");
                 }
+                // --- END OF MODIFIED LOGIC ---
+
             } catch (error) {
                 notifyError(
                     error?.response?.data?.message ||
@@ -195,36 +209,26 @@ const CreateAccountForm = () => {
         }
     };
 
- const handleVerifyOtp = async () => {
-    if (otp.length !== 6) {
-        notifyError("Please enter a 6-digit OTP.");
-        return;
-    }
-    try {
-        const verificationResponse = await AuthAPI.verifyOtp({ email: emailForOtp, otp });
-        
-        if (verificationResponse.status === 200 || verificationResponse.status === 201) {
-            const token = verificationResponse.data?.token;
-            const userData = verificationResponse.data?.user;
-
-            if (token) {
-                // Store in localStorage (persists after tab close)
-                localStorage.setItem('authToken', token);
-                
-                if (userData) {
-                    localStorage.setItem('userData', JSON.stringify(userData));
-                }
-
-                notifySuccess('OTP verified successfully! Account created Successfully');
-                navigate('/login');
-            } else {
-                notifyError('OTP verified, but no token received from the server.');
-            }
+    const handleVerifyOtp = async () => {
+        if (otp.length !== 6) {
+            notifyError("Please enter a 6-digit OTP.");
+            return;
         }
-    } catch (error) {
-        notifyError(error?.message || 'OTP verification failed.');
-    }
-};
+        try {
+            // This API call now only verifies the OTP on the backend.
+            // Token and user data are expected to be saved after registration.
+            const verificationResponse = await AuthAPI.verifyEmail({ email: emailForOtp, otp });
+
+            if (verificationResponse.status === 200 || verificationResponse.status === 201) {
+                notifySuccess('OTP verified successfully! Account created Successfully');
+                navigate('/login'); // Navigate to login as token/user are already stored
+            } else {
+                notifyError(verificationResponse.statusMessage || 'OTP verification failed.');
+            }
+        } catch (error) {
+            notifyError(error?.message || 'OTP verification failed.');
+        }
+    };
 
     // Format timer for display
     const formatTimer = (sec) => {
@@ -351,7 +355,7 @@ const CreateAccountForm = () => {
                 </form>
             ) : (
                 // OTP Verification Form
-                <div className="flex flex-col gap-4 w-full justify-center items-center flex-grow"> {/* flex-grow added here too */}
+                <div className="flex flex-col gap-4 w-full justify-center items-center flex-grow">
                     <p className="text-gray-700 text-sm font-semibold text-center">
                         A 6-digit OTP has been sent to <span className="font-bold">{emailForOtp}</span>.
                         It expires in {formatTimer(timer)}.
