@@ -13,7 +13,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     // Get the token from localStorage (or wherever you store it after login)
-    const token = localStorage.getItem('authToken'); // IMPORTANT: Use the exact key you use!
+    const token = localStorage.getItem('token'); // IMPORTANT: Use the exact key you use!
 
     // If a token exists, add it to the Authorization header
     if (token) {
@@ -37,7 +37,7 @@ axiosInstance.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       console.warn('401 Unauthorized: Token might be expired or invalid. Attempting to log out.');
       // You can trigger a logout action here, e.g.:
-      localStorage.removeItem('authToken'); // Clear the invalid token
+      localStorage.removeItem('token'); // Clear the invalid token
       // window.location.href = '/login'; // Redirect to login page (consider using React Router's navigate)
       // Or dispatch a global logout action if you have a state management system
     }

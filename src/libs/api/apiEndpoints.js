@@ -60,7 +60,8 @@ export const ModelAPI = {
 // USER ENDPOINTS (Updated with all management endpoints)
 export const UserAPI = {
   // Profile Management
-  viewUsers: async () => await getRequest(`users/profile`),
+  viewUser: async () => await getRequest(`users/profile`),
+
   updateProfile: async (body) => await putRequest(`users/profile`, body),
   getTTSModelsByName: async (name) =>
     await getRequest(`users/get-tts-model/${name}`),
@@ -89,16 +90,14 @@ export const UserAPI = {
   filterUsers: async (filters) =>
     await getRequest(`users/filter?${new URLSearchParams(filters).toString()}`),
 
-
   // TTS (Text to Speech) Generation
-generateTTS: async (body) =>
-  await postRequest(`users/synthesis-text-to-speech`, body),
+  generateTTS: async (body) =>
+    await postRequest(`users/synthesis-text-to-speech`, body),
 
-getTTSStatus: async (taskId) =>
-  await getRequest(`users/get-status/${taskId}`),
+  getTTSStatus: async (taskId) =>
+    await getRequest(`users/get-status/${taskId}`),
 
-// ✅ Aliases for compatibility with frontend naming
-synthesizeText: async (body) => await UserAPI.generateTTS(body),
-getSpeechStatus: async (taskId) => await UserAPI.getTTSStatus(taskId),
-
+  // ✅ Aliases for compatibility with frontend naming
+  synthesizeText: async (body) => await UserAPI.generateTTS(body),
+  getSpeechStatus: async (taskId) => await UserAPI.getTTSStatus(taskId),
 };

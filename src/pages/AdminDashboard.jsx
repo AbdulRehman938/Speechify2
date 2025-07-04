@@ -143,7 +143,8 @@ const AdminDashboard = () => {
                         payload = {
                             modelType: currentInputValues.modelType,
                             modelName: currentInputValues.modelName,
-                            displayName: currentInputValues.displayName,
+                            modelDisplayName: currentInputValues.modelDisplayName,
+                            isMultiSpeaker: currentInputValues.isMultiSpeaker
                         };
                         response = await ModelAPI.addModel(payload);
                         break;

@@ -74,19 +74,19 @@ const CreateAccountForm = () => {
         validateOnBlur: false,
         validateOnChange: false, // Ensures validation only runs on submit or explicit calls
         onSubmit: async (values) => {
+            console.log(values)
             const errors = await formik.validateForm();
             formik.setTouched(
                 Object.keys(values).reduce((acc, key) => {
                     acc[key] = true;
                     return acc;
                 }, {})
-            ); // Mark all fields as touched on submit
+            ); 
 
-            if (Object.keys(errors).length > 0) {
-                // Display all errors via toast
-                Object.values(errors).forEach((msg) => notifyError(msg));
-                return; // Stop submission if there are validation errors
-            }
+            // if (Object.keys(errors).length > 0) {
+            //     Object.values(errors).forEach((msg) => notifyError(msg));
+            //     return; // Stop submission if there are validation errors
+            // }
 
             try {
                 let imageUrl = null;
@@ -104,7 +104,6 @@ const CreateAccountForm = () => {
                             imageUploadError?.message ||
                             'Profile image upload failed. Registration will proceed without image.'
                         );
-                        // Do not return here if image upload is optional for registration
                     }
                 }
 
@@ -114,26 +113,18 @@ const CreateAccountForm = () => {
                 };
 
                 const response = await AuthAPI.register(registrationPayload);
+                const {data} = response 
+                console.log(data)
 
-                // --- START OF MODIFIED LOGIC ---
-                // Save token and user data to localStorage immediately after successful registration
-                if (response.status === 200 || response.status === 201) {
-                    const token = response.data?.token;
-                    const userData = response.data?.user;
-
-                    if (token && userData) { // Ensure both token and user data are present
-                        localStorage.setItem('authToken', token);
-                        localStorage.setItem('userData', JSON.stringify(userData));
+                if (data.isSuccess) {
                         notifySuccess('Account created successfully! Sending OTP to your email.');
 
-                        setEmailForOtp(values.email); // Store email for the next step
-                        setCurrentStep('otpVerification'); // Transition to OTP step
+                        setEmailForOtp(values.email); 
+                        setCurrentStep('otpVerification');
                         setTimer(OTP_TIMER); // Start the timer
                         setCanResend(false); // Disable resend initially
 
-                        // Immediately call verify-email API after successful registration to send OTP
                         try {
-                            await AuthAPI.verifyEmail({ email: values.email });
                             notifySuccess("OTP sent to your email!");
                         } catch (otpError) {
                             notifyError(
@@ -141,19 +132,10 @@ const CreateAccountForm = () => {
                                 otpError?.message ||
                                 "Failed to send OTP. Please try resending."
                             );
-                            // You might want to handle this more gracefully, perhaps stay on registration
-                            // or allow resend without a successful initial send confirmation.
                         }
-                    } else {
-                        // Handle case where registration was 200/201 but missing token/user data
-                        notifyError("Registration successful, but missing authentication data. Please try logging in.");
-                        // Optionally navigate to login here if no token is received
-                        // navigate('/login');
-                    }
                 } else {
-                    notifyError(response.statusMessage || "Something went wrong during registration.");
+                    notifyError("Registration successful, but missing authentication data. Please try logging in.");
                 }
-                // --- END OF MODIFIED LOGIC ---
 
             } catch (error) {
                 notifyError(

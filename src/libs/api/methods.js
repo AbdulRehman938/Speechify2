@@ -23,7 +23,12 @@ export const errorHandler = (error) => {
       message = "Session expired. Please log in again.";
     } else {
       // Try to get a more specific message from the backend response
-      message = data.message || data.error || data.errors?.[0]?.msg || error.response.statusText || message;
+      message =
+        data.message ||
+        data.error ||
+        data.errors?.[0]?.msg ||
+        error.response.statusText ||
+        message;
     }
   } else if (error.request) {
     // The request was made but no response was received
@@ -39,7 +44,7 @@ export const errorHandler = (error) => {
   return {
     data: data, // Backend's error data
     status: status, // HTTP status code or 0 for network/setup errors
-    statusMessage: message // User-friendly error message
+    statusMessage: message, // User-friendly error message
   };
 };
 
@@ -75,7 +80,6 @@ export const getRequest = async (
   try {
     const response = await axios.get(url, {
       params,
-      headers: header,
     });
     // Return an object containing both data and status for successful responses
     return { data: response?.data, status: response?.status };

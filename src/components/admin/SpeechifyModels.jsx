@@ -36,7 +36,7 @@ const InputModal = ({ title, fields, isOpen, onClose, onSubmit, isLoading }) => 
                                 value={formData[field.name] || ''}
                                 onChange={handleChange}
                                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                required={field.required !== false} // Default to required
+                                required={field.required !== false}
                             />
                         </div>
                     ))}
@@ -99,7 +99,7 @@ const OutputModal = ({ isOpen, onClose, data, error, isLoading }) => {
 
 
 const SpeechifyModels = () => {
-    const [showInputModal, setShowInputModal] = useState(false); // Renamed from showModal
+    const [showInputModal, setShowInputModal] = useState(false); 
     const [showOutputModal, setShowOutputModal] = useState(false); // New state for output modal
     const [modalTitle, setModalTitle] = useState('');
     const [modalFields, setModalFields] = useState([]);
@@ -163,7 +163,7 @@ const SpeechifyModels = () => {
         }
     };
 
-    // Specific handlers for each action (these remain largely the same)
+    // Specific handlers for each action 
     const handleAddOrUpdateModelSubmit = async (formData) => {
         if (currentAction === 'addModel') {
             await handleApiCall(

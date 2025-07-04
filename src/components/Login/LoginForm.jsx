@@ -31,59 +31,61 @@ const LoginForm = () => {
     });
   };
 
-  const formik = useFormik({
-    initialValues: { email: '', password: '' },
-    validationSchema: fullLoginSchema,
-    validateOnBlur: false,
-    validateOnChange: false,
-    onSubmit: async (values) => {
-      const errors = await formik.validateForm();
+const formik = useFormik({
+  initialValues: { email: '', password: '' },
+  validationSchema: fullLoginSchema,
+  validateOnBlur: false,
+  validateOnChange: false,
+  onSubmit: async (values) => {
+    const errors = await formik.validateForm();
 
-      if (Object.keys(errors).length > 0) {
-        Object.values(errors).forEach((msg) => notifyError(msg));
-        return;
-      }
-      try {
-        const response = await AuthAPI.login(values);
+    if (Object.keys(errors).length > 0) {
+      Object.values(errors).forEach((msg) => notifyError(msg));
+      return;
+    }
 
-        // --- START OF CRITICAL CHANGE ---
-        // Log the full response to inspect it in your browser's console
-        console.log('AuthAPI.login Response:', response);
+    try {
+      const response = await AuthAPI.login(values);
+      const {statusCode} = response.data
+      console.log(statusCode)
 
-        // Check the HTTP status code from the response
-        if (response.status === 200) { // Assuming 200 OK for successful login
-          // Now that we know it's a success, check if the expected data is present
-          if (response.data && response.data.token && response.data.user) {
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data.user));
-            notifySuccess('Login successful!'); // Add a success toast!
+      if (statusCode === 200) {
+        const {data} = response.data;
+        const {token} = data
+        console.log(token)
 
-            if (response.data.user.role === 'admin' || response.data.user.role === 'superadmin') {
-              navigate('/admin-dashboard');
-            } else {
-              navigate('/library');
-            }
-          } else {
-            // This means the API returned 200, but the data structure was unexpected
-            notifyError('Login successful, but missing token or user data in response.');
+        const user = data.user;
+
+        if (token && user) {
+          if (!user.isVerified) {
+            notifyError('Please verify your email before logging in.');
+            return;
+          }
+
+          localStorage.setItem('token', token); 
+          notifySuccess(response.message || 'Login successful!');
+
+          if (user.role === 'admin' || user.role === 'superadmin') {
+            navigate('/admin-dashboard');
+          } else {  
+            navigate('/user-dashboard');
           }
         } else {
-          // If status is NOT 200, it's an error. Use the statusMessage from methods.js
-          // This will correctly show messages like "Invalid credentials" or "User not found"
-          notifyError(response.statusMessage || 'Login failed: An unexpected error occurred.');
+          notifyError('Missing token or user data in response.');
         }
-        // --- END OF CRITICAL CHANGE ---
-
-      } catch (error) {
-        // This catch block is for network errors or errors not structured by methods.js errorHandler
-        notifyError(
-          error?.statusMessage || // Prioritize message from our error handler
-          error?.message ||
-          'Login failed due to an unexpected client-side error.'
-        );
+      } else {
+        notifyError(response.message || 'Login failed: Unexpected response.');
       }
-    },
-  });
+    } catch (error) {
+      notifyError(
+        error?.response?.data?.message ||
+        error?.message ||
+        'Login failed due to a client-side error.'
+      );
+    }
+  },
+});
+
 
   const handleBlurWithToast = (e) => {
     const { name } = e.target;

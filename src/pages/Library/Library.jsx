@@ -190,12 +190,11 @@ const Library = () => {
     try {
       const synthesisPayload = {
         text: text,
-        modelType: 'tts_models', // Assuming this is constant for your TTS API
-        languageCode: selectedLang.languageCode, // Dynamically from selectedLang
-        datasetCode: selectedDataset.datasetCode,     // Dynamically from selectedDataset
+        modelType: 'tts_models',
+        languageCode: selectedLang.languageCode, 
+        datasetCode: selectedDataset.datasetCode,     
         modelName: selectedModel.model_name,   // Dynamically from selectedModel
         speaker: selectedSpeaker.name,         // Dynamically from selectedSpeaker
-        // speed: parseFloat(selectedSpeed.replace('X', '')), // Convert "1X" to 1.0, "1.5X" to 1.5 etc.
       };
 
       console.log("Sending synthesis request with payload:", synthesisPayload);
