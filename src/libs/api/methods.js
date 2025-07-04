@@ -75,11 +75,15 @@ export const postRequest = async (url, data, params = {}) => {
 export const getRequest = async (
   url,
   params = {},
-  header = { "Content-Type": "application/json", Accept: "*/*" }
+  headers = {
+    "Content-Type": "application/json",
+    "ngrok-skip-browser-warning": "true"
+  }
 ) => {
   try {
     const response = await axios.get(url, {
       params,
+      headers,
     });
     // Return an object containing both data and status for successful responses
     return { data: response?.data, status: response?.status };

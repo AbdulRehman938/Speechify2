@@ -2,12 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { UserAPI } from '/src/libs/api/apiEndpoints'
-
+import { UserAPI } from '/src/libs/api/apiEndpoints';
 import axios from 'axios';
 
-
-// Keep other cards and modals (except the removed ones)
 import DiscoverApps from '/src/components/UserDashboard/DiscoverApps';
 import FooterCards from '/src/components/UserDashboard/FooterCards';
 import EditSetUser from '/src/components/UserDashboard/EditSetUser';
@@ -24,7 +21,6 @@ import FooterCardsModal from '/src/components/UserDashboard/FooterCardsModal';
 const DEFAULT_USER_NAME = 'Guest User';
 const DEFAULT_USER_EMAIL = 'guest@example.com';
 const DEFAULT_USER_PROFILE_PIC = 'src/assets/icons/demo-account.png';
-
 const USER_SIDEBAR_ITEMS = ['Dashboard', 'Subscription', 'Settings', 'Logout'];
 
 const UserDashboard = () => {
@@ -40,66 +36,75 @@ const UserDashboard = () => {
     const notifySuccess = (message) => toast.success(message, { position: 'top-right', autoClose: 2000, theme: 'colored' });
 
     useEffect(() => {
-        const fetchAndStoreUser = async () => {
-            console.log("in fetch");
-
-            const token = localStorage.getItem('token');
-            console.log(token)
-            const baseUrl = import.meta.env.VITE_BASE_API_URL;
-            console.log("Base URL:", baseUrl);
-
-
-            if (!token) {
-                console.log("No token exists.");
-                return;
-            }
-
+        const fetchUserData = async () => {
             try {
-                const response = await axios.get(
-                    `${baseUrl}users/bio`,
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Accept': 'application/json', // ← Required for browser requests
-                            'Content-Type': 'application/json', // ← Sometimes needed
-                        },
-                    }
-                );
+                const response = await UserAPI.viewUser();
+                console.log('viewUser response:', response);
 
-                console.log('User profile:', response.data);
+                const data = response.data.data;
 
+                const { firstName, lastName, profilePicture } = data
+                console.log(firstName, lastName, profilePicture)
+
+                const firstNameInitial = typeof firstName === 'string' ? firstName?.charAt(0).toUpperCase() : '';
+                const lastNameInitial = typeof lastName === 'string' ? lastName?.charAt(0).toUpperCase() : '';
+                console.log(firstNameInitial, lastNameInitial)
+
+                const initials = `${firstNameInitial} ${lastNameInitial}`.toUpperCase() || 'GU';
+                console.log(initials)
+
+                const fullName = `${firstName || ''} ${lastName || ''}`.trim();
+                const profileImageUrl = profilePicture?.trim();
+                const hasProfileImage = !!profileImageUrl;
+
+                setLoggedInUser({
+                    fullName: fullName || DEFAULT_USER_NAME,
+                    email: data.email || DEFAULT_USER_EMAIL,
+                    profileImageUrl: hasProfileImage ? profileImageUrl : null,
+                    initials: hasProfileImage ? null : initials,
+                    role: data.role?.name || 'Basic',
+                });
+
+                notifySuccess('User data loaded successfully');
             } catch (error) {
-                console.error('Error fetching profile:', error);
+                console.error("Error fetching user data:", error);
+                notifyError("An error occurred while loading user data.");
+
+                setLoggedInUser({
+                    fullName: DEFAULT_USER_NAME,
+                    email: DEFAULT_USER_EMAIL,
+                    profileImageUrl: null,
+                    initials: 'GU',
+                    role: 'Basic',
+                });
             }
         };
 
-        fetchAndStoreUser();
+        fetchUserData();
     }, []);
 
+    {
+        loggedInUser?.profileImageUrl ? (
+            <img
+                className="rounded-full h-[7rem] w-[7rem]"
+                src={loggedInUser.profileImageUrl}
+                alt="User Profile"
+                onError={() => {
+                    setLoggedInUser((prev) => ({
+                        ...prev,
+                        profileImageUrl: null,
+                        initials:
+                            `${prev.fullName?.split(' ')[0]?.[0] || ''}${prev.fullName?.split(' ')[1]?.[0] || ''}`.toUpperCase() || 'GU',
+                    }));
+                }}
+            />
+        ) : (
+            <div className="rounded-full h-[7rem] w-[7rem] bg-gray-400 text-white flex items-center justify-center text-3xl font-bold">
+                {loggedInUser?.initials || 'GU'}
+            </div>
+        )
+    }
 
-    // try {
-    //     const userData = await UserAPI.viewUser();
-    //     console.log(userData);
-
-    //     setLoggedInUser({
-    //         fullName: `${userData.firstName} ${userData.lastName}`.trim(),
-    //         email: userData.email || DEFAULT_USER_EMAIL,
-    //         profileImageUrl: userData.profileImageUrl || DEFAULT_USER_PROFILE_PIC,
-    //         role: userData.role || 'Basic',
-    //     });
-
-    //     notifySuccess('User data loaded successfully');
-    // } catch (error) {
-    //     console.error("Error fetching user data:", error);
-    //     notifyError("An error occurred while loading user data.");
-
-    //     setLoggedInUser({
-    //         fullName: DEFAULT_USER_NAME,
-    //         email: DEFAULT_USER_EMAIL,
-    //         profileImageUrl: DEFAULT_USER_PROFILE_PIC,
-    //         role: 'Basic',
-    //     });
-    // }
 
     const handleLogout = () => {
         localStorage.removeItem('loggedInUser');
@@ -124,10 +129,6 @@ const UserDashboard = () => {
 
             {/* Top Navbar */}
             <div className='bg-transparent w-full h-[3rem] flex justify-between items-center px-[2rem]'>
-                {/* <div id='navigate-library' className='bg-transparent w-auto h-[2rem] flex items-center cursor-pointer' onClick={() => navigate('/library')}>
-          <img className='h-6 w-6' src="src/assets/icons/left-arrow.svg" alt="left-arrow" />
-          <span>Library</span>
-        </div> */}
                 <img src="src/assets/icons/Speechify-logo2.svg" alt="speechify-logo" />
             </div>
 
@@ -135,8 +136,14 @@ const UserDashboard = () => {
             <div className="flex flex-row items-start justify-between w-[55%] mt-[3rem]">
                 {/* Sidebar */}
                 <div className="flex flex-col items-start w-[20rem]">
-                    <img className="rounded-full h-auto w-[7rem]" src={loggedInUser?.profileImageUrl} alt="User Profile" />
-                    <h1 className="text-[1.5rem] font-semibold pl-[0.5rem]">{loggedInUser?.fullName}</h1>
+                    {loggedInUser?.profileImageUrl ? (
+                        <img className="rounded-full h-[7rem] w-[7rem]" src={loggedInUser.profileImageUrl} alt="User Profile" />
+                    ) : (
+                        <div className="rounded-full h-[7rem] w-[7rem] bg-gray-400 text-white flex items-center justify-center text-3xl font-bold">
+                            {loggedInUser?.initials}
+                        </div>
+                    )}
+                    <h1 className="text-[1.5rem] font-semibold pl-[0.5rem] mt-2">{loggedInUser?.fullName}</h1>
                     <p className="text-[1.2rem] font-medium pl-[0.5rem]">{loggedInUser?.role}</p>
                     <ul className="flex flex-col items-start w-full pl-[0.5rem] mt-[1rem] text-[1.2rem] font-medium">
                         {USER_SIDEBAR_ITEMS.map((item, idx) => (
@@ -153,7 +160,6 @@ const UserDashboard = () => {
                 <div className="bg-[#f5f5fa] w-[65%] rounded-[1rem]">
                     {selectedIndex === 0 && (
                         <>
-                            {/* Upgrade Card */}
                             <div onClick={() => openModal('subscription')} className="w-full h-auto rounded-[1rem] flex flex-row items-center justify-between pl-[2rem] cursor-pointer" style={{ background: 'radial-gradient(circle at left, #2f45fa 0%, #3bbefa 100%)' }}>
                                 <div className="flex flex-col items-left justify-around w-[25rem] h-full px-[2rem] py-[1.3rem]">
                                     <h1 className="text-white font-bold text-[1.1rem]">Enjoy the most advanced AI voices, unlimited files, and 24/7 support</h1>
@@ -162,29 +168,18 @@ const UserDashboard = () => {
                                 <img className="h-auto w-[12rem]" src="src/assets/images/udash-img1.png" alt="user-dashboard" />
                             </div>
 
-                            {/* --- Replacement Buttons for Removed Cards --- */}
                             <div className="flex flex-row w-full mt-[1rem] gap-[1rem]">
-                                <button
-                                    className="w-[35%] h-[10rem] bg-white rounded-[1rem] text-xl font-semibold flex items-center justify-center hover:bg-gray-200"
-                                    onClick={() => navigate('/library')}
-                                >
+                                <button className="w-[35%] h-[10rem] bg-white rounded-[1rem] text-xl font-semibold flex items-center justify-center hover:bg-gray-200" onClick={() => navigate('/library')}>
                                     Text to Speech
                                 </button>
-                                <button
-                                    className="w-[32%] h-[10rem] bg-white rounded-[1rem] text-xl font-semibold flex items-center justify-center hover:bg-gray-200"
-                                    onClick={() => navigate('/voice-clone')}
-                                >
+                                <button className="w-[32%] h-[10rem] bg-white rounded-[1rem] text-xl font-semibold flex items-center justify-center hover:bg-gray-200" onClick={() => navigate('/voice-clone')}>
                                     AI Voice Cloning
                                 </button>
-                                <button
-                                    className="w-[30%] h-[10rem] bg-white rounded-[1rem] text-xl font-semibold flex items-center justify-center hover:bg-gray-200"
-                                    onClick={() => navigate('/voice-dub')}
-                                >
+                                <button className="w-[30%] h-[10rem] bg-white rounded-[1rem] text-xl font-semibold flex items-center justify-center hover:bg-gray-200" onClick={() => navigate('/voice-dub')}>
                                     AI Voice Dubbing
                                 </button>
                             </div>
 
-                            {/* Keep Discover & Footer Cards */}
                             <div onClick={() => openModal('discover')}><DiscoverApps /></div>
                             <FooterCards onShareThoughts={() => openModal('FooterCardsModal')} onDeletedFiles={() => openModal('deleted')} />
                         </>
