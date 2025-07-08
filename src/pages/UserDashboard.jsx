@@ -44,7 +44,7 @@ const UserDashboard = () => {
                 const { firstName, lastName, profilePicture } = data;
 
                 const fullName = `${firstName || ''} ${lastName || ''}`.trim();
-                const profileImageUrl = profilePicture?.trim();
+                const profileImageUrl = profilePicture;
                 const hasProfileImage = !!profileImageUrl;
 
 
@@ -52,13 +52,13 @@ const UserDashboard = () => {
                 const initials =
                     `${firstName?.charAt(0) || ''}${lastName?.charAt(0) || ''}`.toUpperCase() || 'GU';
 
-               setLoggedInUser({
-  fullName: fullName || DEFAULT_USER_NAME,
-  email: data.email || DEFAULT_USER_EMAIL,
-  profileImageUrl: hasProfileImage ? profileImageUrl : null,
-  initials: !hasProfileImage ? initials : null,
-  role: data.role?.name || 'Basic',
-});
+                setLoggedInUser({
+                    fullName: fullName || DEFAULT_USER_NAME,
+                    email: data.email || DEFAULT_USER_EMAIL,
+                    profileImageUrl: hasProfileImage ? profileImageUrl : null,
+                    initials: !hasProfileImage ? initials : null,
+                    role: data.role?.name || 'Basic',
+                });
 
 
                 notifySuccess('User data loaded successfully');
@@ -110,10 +110,10 @@ const UserDashboard = () => {
 
             // 3. Update UI with new image
             setLoggedInUser((prev) => ({
-  ...prev,
-  profileImageUrl: imageUrl,
-  initials: null,
-}));
+                ...prev,
+                profileImageUrl: imageUrl,
+                initials: null,
+            }));
 
 
             notifySuccess('Profile image updated successfully!');

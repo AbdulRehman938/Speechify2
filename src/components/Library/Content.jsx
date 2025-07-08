@@ -18,7 +18,7 @@ import ReaderComponent from './Reader-component';
 
 const Content = ({ onTriggerCreateText, onTriggerPasteLink }) => {
     // Dummy user for demonstration
-    const user = { firstName: "Speechify" }; // Replace with actual user context or localStorage retrieval
+    const user = { firstName: "Speechify" }; 
     const firstName = user?.firstName || "User";
 
     const fileInputRef = useRef(null);
