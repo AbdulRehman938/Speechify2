@@ -68,7 +68,7 @@ const UserDashboard = () => {
                 setLoggedInUser({
                     fullName: DEFAULT_USER_NAME,
                     email: DEFAULT_USER_EMAIL,
-                    profileImageUrl: null,
+                    profileImageUrl: imageUrl,
                     initials: 'GU',
                     role: 'Basic',
                 });
