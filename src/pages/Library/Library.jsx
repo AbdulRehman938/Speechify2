@@ -16,6 +16,8 @@ const Library = () => {
   const speedOptions = ['0.3X', '0.5X', '0.75X', '1X', '1.25X', '1.5X', '1.75X', '2X'];
 
   const noResponseTimeoutRef = useRef(null);
+  const lastResponseTimeRef = useRef(null);
+
 
   const [availableSpeakers, setAvailableSpeakers] = useState([]);
   const [availableLanguagesForDropdown, setAvailableLanguagesForDropdown] = useState([]);
@@ -150,13 +152,10 @@ const Library = () => {
     try {
       const synthesisPayload = {
         text,
-        modelType: "tts_models",
-        languageCode: "uk",
-        datasetCode: "mai",
-        modelName: "glow-tts",
-        // speaker: "p225",
+        model: "tts_models/multilingual/multi-dataset/your_tts",
+        language: "",
+        speaker: "male-en-2\n",
         speakerWav: "",
-        language: "uk"
       };
 
       const synthesisResponse = await UserAPI.synthesizeText(synthesisPayload);
@@ -236,7 +235,7 @@ const Library = () => {
               noResponseTimeoutRef.current = null;
               throw new Error('Speech synthesis failed');
             } else {
-              pollingTimeoutRef.current = setTimeout(() => pollStatus(currentTaskId), 30000);
+              pollingTimeoutRef.current = setTimeout(() => pollStatus(currentTaskId), 2000);
             }
           } catch (err) {
             setLoading(false);
@@ -404,11 +403,26 @@ const Library = () => {
             contentEditable={!(isPlaying || loading)}
             suppressContentEditableWarning={true}
             onBeforeInput={(e) => {
+              const char = e.data;
+              // Block input if it's a number or symbol (allow only letters and spaces)
+              if (!/^[a-zA-Z\s]$/.test(char)) {
+                e.preventDefault();
+                return;
+              }
+
               const plainText = e.currentTarget.innerText;
               if (plainText.length >= 1000) {
                 e.preventDefault();
               }
             }}
+            onPaste={(e) => {
+              e.preventDefault();
+              const pastedText = e.clipboardData.getData("text/plain");
+              const filteredText = pastedText.replace(/[^a-zA-Z\s]/g, ''); // Remove symbols/numbers
+              document.execCommand("insertText", false, filteredText);
+            }}
+
+
             onInput={handleTextInput}
             style={{ pointerEvents: isPlaying || loading ? 'none' : 'auto' }}
           />
@@ -438,7 +452,7 @@ const Library = () => {
                   </ul>
                 )}
               </div>
-              <div onClick={() => {
+              {/* <div onClick={() => {
                 if (!(isPlaying || loading)) handleSetTemplate('Podcast');
               }} className='px-4 py-1 bg-gray-300 h-[3rem] rounded-[1rem] text-[1.3rem] pt-[0.5rem] hover:bg-gray-400 cursor-pointer'>Podcast</div>
               <div onClick={() => {
@@ -446,7 +460,7 @@ const Library = () => {
               }} className='px-4 py-1 bg-gray-300 h-[3rem] rounded-[1rem] text-[1.3rem] pt-[0.5rem] hover:bg-gray-400 cursor-pointer'>Youtube</div>
               <div onClick={() => {
                 if (!(isPlaying || loading)) handleSetTemplate('Training');
-              }} className='px-4 py-1 bg-gray-300 h-[3rem] rounded-[1rem] text-[1.3rem] pt-[0.5rem] hover:bg-gray-400 cursor-pointer'>Training</div>
+              }} className='px-4 py-1 bg-gray-300 h-[3rem] rounded-[1rem] text-[1.3rem] pt-[0.5rem] hover:bg-gray-400 cursor-pointer'>Training</div> */}
             </div>
             <div className={`${characterCount >= 1000 ? 'text-red-600' : 'text-black'} text-lg`}>
               {characterCount}/1000 characters
